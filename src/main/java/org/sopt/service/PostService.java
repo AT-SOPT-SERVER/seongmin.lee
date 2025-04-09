@@ -14,7 +14,7 @@ public class PostService {
 
     private final PostRepository postRepository = new PostRepository();
     public void addPost(String title) {
-        if (validateTitle(title)) return;
+        validateTitle(title);
 
         Post post = new Post(IdGeneratorUtil.generateId(), title);
         postRepository.save(post);
@@ -29,7 +29,7 @@ public class PostService {
     }
 
     public boolean updatePost(int updateId, String newTitle) {
-        if(validateTitle(newTitle)) return false;
+        validateTitle(newTitle);
 
         Post post = postRepository.findPostById(updateId);
         if(post == null){
@@ -47,12 +47,12 @@ public class PostService {
         return postRepository.findPostsByKeyword(keyword);
     }
 
-    private boolean validateTitle(String title) {
-        if(TitleValidator.isBlank(title)) return true;
-        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) return true;
+    private void validateTitle(String title) {
+        if(TitleValidator.isBlank(title)) throw new IllegalArgumentException("제목은 비어있을 수 없습니다.");
+        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new IllegalArgumentException("제목은 30글자를 초과해선 안됩니다.");
 
         Post findPost = postRepository.findPostByTitle(title);
-        return findPost != null;
+        if(findPost != null) throw new IllegalStateException("이미 존재하는 제목입니다.");
     }
 
     public boolean saveAsFile() throws IOException {
