@@ -9,7 +9,6 @@ public class PostController {
 
     private final PostService postService = new PostService();
 
-
     public void createPost(String title) {
         postService.addPost(title);
     }

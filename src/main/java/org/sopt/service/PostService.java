@@ -14,7 +14,7 @@ public class PostService {
     private final PostRepository postRepository = new PostRepository();
     public void addPost(String title) {
         if(TitleValidator.isBlank(title)) return;
-        if(TitleValidator.isExceedingCharLimit(title, TITLE_LIMIT)) return;
+        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) return;
 
         Post findPost = postRepository.findPostByTitle(title);
         if(findPost != null) return;
