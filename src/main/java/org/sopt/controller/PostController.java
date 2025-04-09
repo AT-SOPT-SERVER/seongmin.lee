@@ -12,6 +12,8 @@ public class PostController {
     private static int sequence = 0;
 
     public void createPost(String title) {
+        if(title.isBlank()) return;
+        if(title.length() > 30) return;
         Post post = new Post(sequence++, title);
         postService.addPost(post);
     }
