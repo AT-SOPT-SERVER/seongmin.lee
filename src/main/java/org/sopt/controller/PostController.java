@@ -9,13 +9,9 @@ public class PostController {
 
     private final PostService postService = new PostService();
 
-    private static int sequence = 0;
 
     public void createPost(String title) {
-        if(title.isBlank()) return;
-        if(title.length() > 30) return;
-        Post post = new Post(sequence++, title);
-        postService.addPost(post);
+        postService.addPost(title);
     }
 
     public List<Post> getAllPosts() {

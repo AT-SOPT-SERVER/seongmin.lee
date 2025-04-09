@@ -7,8 +7,12 @@ import java.util.List;
 
 public class PostService {
 
+    private static int sequence = 0;
     private final PostRepository postRepository = new PostRepository();
-    public void addPost(Post post) {
+    public void addPost(String title) {
+        if(title.isBlank()) return;
+        if(title.length() > 30) return;
+        Post post = new Post(sequence++, title);
         postRepository.save(post);
     }
 
