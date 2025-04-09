@@ -3,14 +3,29 @@ package org.sopt.controller;
 import org.sopt.domain.Post;
 import org.sopt.service.PostService;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PostController {
 
     private final PostService postService = new PostService();
+    private LocalDateTime lastPostTime;
 
     public void createPost(String title) {
-        postService.addPost(title);
+
+        if (lastPostTime == null){
+            postService.addPost(title);
+            lastPostTime = LocalDateTime.now();
+        }else {
+            Duration diff = Duration.between(LocalDateTime.now(), lastPostTime);
+            long minutes = diff.toMinutes();
+            if(minutes < 3) return;
+
+            postService.addPost(title);
+            lastPostTime = LocalDateTime.now();
+        }
+
     }
 
     public List<Post> getAllPosts() {
