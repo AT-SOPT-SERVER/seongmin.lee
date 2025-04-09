@@ -9,6 +9,10 @@ public class Post {
 
     }
 
+    public Post(String title){
+        this.title = title;
+    }
+
     public Post(int id, String title) {
         this.id = id;
         this.title = title;
