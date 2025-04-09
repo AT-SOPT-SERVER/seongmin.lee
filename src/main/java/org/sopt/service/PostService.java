@@ -13,11 +13,7 @@ public class PostService {
 
     private final PostRepository postRepository = new PostRepository();
     public void addPost(String title) {
-        if(TitleValidator.isBlank(title)) return;
-        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) return;
-
-        Post findPost = postRepository.findPostByTitle(title);
-        if(findPost != null) return;
+        if (validateTitle(title)) return;
 
         Post post = new Post(IdGeneratorUtil.generateId(), title);
         postRepository.save(post);
@@ -32,6 +28,8 @@ public class PostService {
     }
 
     public boolean updatePost(int updateId, String newTitle) {
+        if(validateTitle(newTitle)) return false;
+
         Post post = postRepository.findPostById(updateId);
         if(post == null){
             return false;
@@ -46,5 +44,14 @@ public class PostService {
 
     public List<Post> searchPosts(String keyword) {
         return postRepository.findPostsByKeyword(keyword);
+    }
+
+    private boolean validateTitle(String title) {
+        if(TitleValidator.isBlank(title)) return true;
+        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) return true;
+
+        Post findPost = postRepository.findPostByTitle(title);
+        if(findPost != null) return true;
+        return false;
     }
 }
