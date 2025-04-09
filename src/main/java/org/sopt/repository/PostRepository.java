@@ -41,4 +41,11 @@ public class PostRepository {
                     return post.getTitle().contains(keyword);
                 }).toList();
     }
+
+    public Post findPostByTitle(String title){
+        return postList.stream()
+                .filter(post -> {
+                    return post.getTitle().equals(title);
+                }).findFirst().orElse(null);
+    }
 }

@@ -12,6 +12,10 @@ public class PostService {
     public void addPost(String title) {
         if(title.isBlank()) return;
         if(title.length() > 30) return;
+
+        Post findPost = postRepository.findPostByTitle(title);
+        if(findPost != null) return;
+
         Post post = new Post(IdGeneratorUtil.generateId(), title);
         postRepository.save(post);
     }
