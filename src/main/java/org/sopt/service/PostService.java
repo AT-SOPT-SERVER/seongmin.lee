@@ -5,6 +5,7 @@ import org.sopt.repository.PostRepository;
 import org.sopt.util.IdGeneratorUtil;
 import org.sopt.validator.TitleValidator;
 
+import java.io.IOException;
 import java.util.List;
 
 public class PostService {
@@ -51,7 +52,14 @@ public class PostService {
         if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) return true;
 
         Post findPost = postRepository.findPostByTitle(title);
-        if(findPost != null) return true;
-        return false;
+        return findPost != null;
+    }
+
+    public boolean saveAsFile() throws IOException {
+        return postRepository.saveAsFile();
+    }
+
+    public boolean loadFromFile() throws IOException {
+        return postRepository.loadFromFile();
     }
 }

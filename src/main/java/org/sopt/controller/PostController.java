@@ -3,6 +3,7 @@ package org.sopt.controller;
 import org.sopt.domain.Post;
 import org.sopt.service.PostService;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,5 +47,13 @@ public class PostController {
 
     public List<Post> searchPostsByKeyword(String keyword) {
         return postService.searchPosts(keyword);
+    }
+
+    public boolean saveAsFile() throws IOException {
+        return postService.saveAsFile();
+    }
+
+    public boolean loadFromFile() throws IOException {
+        return postService.loadFromFile();
     }
 }

@@ -26,4 +26,8 @@ public class Post {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return id + " : " + title;
+    }
 }
