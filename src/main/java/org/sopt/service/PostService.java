@@ -3,15 +3,18 @@ package org.sopt.service;
 import org.sopt.domain.Post;
 import org.sopt.repository.PostRepository;
 import org.sopt.util.IdGeneratorUtil;
+import org.sopt.validator.TitleValidator;
 
 import java.util.List;
 
 public class PostService {
 
+    private final int TITLE_LIMIT = 30;
+
     private final PostRepository postRepository = new PostRepository();
     public void addPost(String title) {
-        if(title.isBlank()) return;
-        if(title.length() > 30) return;
+        if(TitleValidator.isBlank(title)) return;
+        if(TitleValidator.isExceedingCharLimit(title, TITLE_LIMIT)) return;
 
         Post findPost = postRepository.findPostByTitle(title);
         if(findPost != null) return;
