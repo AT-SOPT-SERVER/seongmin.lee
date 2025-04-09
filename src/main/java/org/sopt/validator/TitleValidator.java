@@ -7,9 +7,6 @@ import java.util.regex.Pattern;
 
 public class TitleValidator {
 
-    private static final Pattern graphemePattern = Pattern.compile("\\X");
-    private static final Matcher graphemeMatcher = graphemePattern.matcher("");
-
     public static boolean isBlank(String title){
         return title.isBlank();
     }
@@ -27,6 +24,7 @@ public class TitleValidator {
             if(end == BreakIterator.DONE) break;
             count++;
         }
+//        System.out.println("count = " + count);
         return count > limit;
     }
 }
