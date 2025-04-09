@@ -37,15 +37,14 @@ public class PostRepository {
 
     public List<Post> findPostsByKeyword(String keyword) {
         return postList.stream()
-                .filter(post -> {
-                    return post.getTitle().contains(keyword);
-                }).toList();
+                .filter(post -> post.getTitle().contains(keyword))
+                .toList();
     }
 
     public Post findPostByTitle(String title){
         return postList.stream()
-                .filter(post -> {
-                    return post.getTitle().equals(title);
-                }).findFirst().orElse(null);
+                .filter(post -> post.getTitle().equals(title))
+                .findFirst()
+                .orElse(null);
     }
 }
