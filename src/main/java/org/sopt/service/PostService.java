@@ -2,10 +2,13 @@ package org.sopt.service;
 
 import org.sopt.domain.Post;
 import org.sopt.repository.PostRepository;
+import org.sopt.util.FileUtil;
 import org.sopt.util.IdGeneratorUtil;
 import org.sopt.validator.TitleValidator;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 
 public class PostService {
@@ -56,10 +59,37 @@ public class PostService {
     }
 
     public boolean saveAsFile() throws IOException {
-        return postRepository.saveAsFile();
+        List<Post> postList = postRepository.findAll();
+        StringBuilder sb = new StringBuilder();
+
+        postList.forEach(post -> sb.append(post.toString()).append("\n"));
+
+        return FileUtil.saveContentAsFile(sb.toString());
     }
 
     public boolean loadFromFile() throws IOException {
-        return postRepository.loadFromFile();
+        String content = FileUtil.loadContentFromFile();
+
+        List<Post> postList = postRepository.findAll();
+
+        postList.clear();
+
+        BufferedReader reader = new BufferedReader(new StringReader(content));
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.isBlank()) continue; // 빈 줄 스킵
+
+            String[] parts = line.split(" : ", 2);
+            if (parts.length < 2) continue;
+
+            int id = Integer.parseInt(parts[0]);
+            String title = parts[1];
+
+            Post post = new Post(id, title);
+            postList.add(post);
+        }
+
+        return true;
     }
 }
