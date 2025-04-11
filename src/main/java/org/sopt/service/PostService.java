@@ -1,6 +1,7 @@
 package org.sopt.service;
 
 import org.sopt.domain.Post;
+import org.sopt.exception.ErrorMessage;
 import org.sopt.repository.PostRepository;
 import org.sopt.util.FileUtil;
 import org.sopt.util.IdGeneratorUtil;
@@ -10,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
+
+import static org.sopt.exception.ErrorMessage.*;
 
 public class PostService {
 
@@ -87,10 +90,10 @@ public class PostService {
     }
 
     private void validateTitle(String title) {
-        if(TitleValidator.isBlank(title)) throw new IllegalArgumentException("제목은 비어있을 수 없습니다.");
-        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new IllegalArgumentException("제목은 30글자를 초과해선 안됩니다.");
+        if(TitleValidator.isBlank(title)) throw new IllegalArgumentException(NOT_ALLOWED_BLANK_TITLE.getMessage());
+        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new IllegalArgumentException(TOO_LONG_TITLE.getMessage());
 
         Post findPost = postRepository.findPostByTitle(title);
-        if(findPost != null) throw new IllegalStateException("이미 존재하는 제목입니다.");
+        if(findPost != null) throw new IllegalStateException(DUPLICATED_TITLE.getMessage());
     }
 }

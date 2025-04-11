@@ -1,6 +1,7 @@
 package org.sopt.controller;
 
 import org.sopt.domain.Post;
+import org.sopt.exception.ErrorMessage;
 import org.sopt.service.PostService;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.sopt.domain.Post.lastPostTime;
+import static org.sopt.exception.ErrorMessage.*;
 
 public class PostController {
 
@@ -22,7 +24,7 @@ public class PostController {
         }else {
             Duration diff = Duration.between(LocalDateTime.now(), lastPostTime);
             long minutes = diff.toMinutes();
-            if(minutes < 3) throw new IllegalStateException("마지막 요청 이후 3분이 지나지 않았습니다.");
+            if(minutes < 3) throw new IllegalStateException(ERROR_NOT_EXPIRED_YET.getMessage());
 
             postService.addPost(title);
             lastPostTime = LocalDateTime.now();
