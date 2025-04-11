@@ -18,22 +18,14 @@ public class PostRepository {
     }
 
     public Post findPostById(int id) {
-        for (Post post : postList) {
-            if(post.getId() == id){
-                return post;
-            }
-        }
-        return null;
+        return postList.stream()
+                .filter(post -> post.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     public boolean deleteById(int deleteId) {
-        for (Post post : postList) {
-            if(post.getId() == deleteId){
-                postList.remove(post);
-                return true;
-            }
-        }
-        return false;
+        return postList.removeIf(post -> post.getId() == deleteId);
     }
 
     public List<Post> findPostsByKeyword(String keyword) {
