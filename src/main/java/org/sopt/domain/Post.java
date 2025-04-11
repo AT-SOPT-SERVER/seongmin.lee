@@ -1,9 +1,13 @@
 package org.sopt.domain;
 
+import java.time.LocalDateTime;
+
 public class Post {
 
     private int id;
     private String title;
+
+    public static LocalDateTime lastPostTime;
 
     public Post(int id, String title) {
         this.id = id;

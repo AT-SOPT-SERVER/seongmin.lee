@@ -28,6 +28,7 @@ public class PostService {
     }
 
     public Post getPost(int id) {
+
         return postRepository.findPostById(id);
     }
 
@@ -48,14 +49,6 @@ public class PostService {
 
     public List<Post> searchPosts(String keyword) {
         return postRepository.findPostsByKeyword(keyword);
-    }
-
-    private void validateTitle(String title) {
-        if(TitleValidator.isBlank(title)) throw new IllegalArgumentException("제목은 비어있을 수 없습니다.");
-        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new IllegalArgumentException("제목은 30글자를 초과해선 안됩니다.");
-
-        Post findPost = postRepository.findPostByTitle(title);
-        if(findPost != null) throw new IllegalStateException("이미 존재하는 제목입니다.");
     }
 
     public boolean saveAsFile() throws IOException {
@@ -91,5 +84,13 @@ public class PostService {
         }
 
         return true;
+    }
+
+    private void validateTitle(String title) {
+        if(TitleValidator.isBlank(title)) throw new IllegalArgumentException("제목은 비어있을 수 없습니다.");
+        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new IllegalArgumentException("제목은 30글자를 초과해선 안됩니다.");
+
+        Post findPost = postRepository.findPostByTitle(title);
+        if(findPost != null) throw new IllegalStateException("이미 존재하는 제목입니다.");
     }
 }

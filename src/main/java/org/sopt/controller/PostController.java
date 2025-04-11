@@ -8,10 +8,11 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.sopt.domain.Post.lastPostTime;
+
 public class PostController {
 
     private final PostService postService = new PostService();
-    private LocalDateTime lastPostTime;
 
     public void createPost(String title) {
 
@@ -21,7 +22,7 @@ public class PostController {
         }else {
             Duration diff = Duration.between(LocalDateTime.now(), lastPostTime);
             long minutes = diff.toMinutes();
-            if(minutes < 3) return;
+            if(minutes < 3) throw new IllegalStateException("마지막 요청 이후 3분이 지나지 않았습니다.");
 
             postService.addPost(title);
             lastPostTime = LocalDateTime.now();
