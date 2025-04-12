@@ -6,6 +6,8 @@ import org.sopt.repository.PostRepository;
 import org.sopt.util.FileUtil;
 import org.sopt.util.IdGeneratorUtil;
 import org.sopt.validator.TitleValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,16 +16,24 @@ import java.util.List;
 
 import static org.sopt.exception.ErrorMessage.*;
 
+@Service
 public class PostService {
 
     private final int TITLE_LIMIT = 30;
 
-    private final PostRepository postRepository = new PostRepository();
+    private final PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
+
     public void addPost(String title) {
         validateTitle(title);
 
         Post post = new Post(IdGeneratorUtil.generateId(), title);
         postRepository.save(post);
+
+        System.out.println(post.getTitle());
     }
 
     public List<Post> getAllPosts() {

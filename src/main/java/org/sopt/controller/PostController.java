@@ -1,8 +1,14 @@
 package org.sopt.controller;
 
 import org.sopt.domain.Post;
+import org.sopt.dto.PostRequest;
 import org.sopt.exception.ErrorMessage;
 import org.sopt.service.PostService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -12,28 +18,36 @@ import java.util.List;
 import static org.sopt.domain.Post.lastPostTime;
 import static org.sopt.exception.ErrorMessage.*;
 
+@RestController
 public class PostController {
 
-    private final PostService postService = new PostService();
+    private final PostService postService;
 
-    public void createPost(String title) {
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
+    @PostMapping("/post")
+    public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
 
         if (lastPostTime == null){
-            postService.addPost(title);
+            postService.addPost(postRequest.getTitle());
             lastPostTime = LocalDateTime.now();
         }else {
             Duration diff = Duration.between(LocalDateTime.now(), lastPostTime);
             long minutes = diff.toMinutes();
             if(minutes < 3) throw new IllegalStateException(ERROR_NOT_EXPIRED_YET.getMessage());
 
-            postService.addPost(title);
+            postService.addPost(postRequest.getTitle());
             lastPostTime = LocalDateTime.now();
         }
+        return ResponseEntity.ok("ok");
 
     }
 
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    @GetMapping("/posts")
+    public ResponseEntity<?> getAllPosts() {
+        return ResponseEntity.ok(postService.getAllPosts());
     }
 
     public Post getPostById(int id) {
