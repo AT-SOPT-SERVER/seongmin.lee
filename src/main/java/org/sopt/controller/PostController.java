@@ -1,22 +1,11 @@
 package org.sopt.controller;
 
-import org.sopt.domain.Post;
+import org.sopt.aop.RateLimit;
 import org.sopt.dto.PostRequest;
-import org.sopt.exception.ErrorMessage;
+import org.sopt.dto.UpdateRequest;
 import org.sopt.service.PostService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.sopt.domain.Post.lastPostTime;
-import static org.sopt.exception.ErrorMessage.*;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PostController {
@@ -28,21 +17,27 @@ public class PostController {
     }
 
     @PostMapping("/post")
+    @RateLimit
     public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
-
-        if (lastPostTime == null){
-            postService.addPost(postRequest.getTitle());
-            lastPostTime = LocalDateTime.now();
-        }else {
-            Duration diff = Duration.between(LocalDateTime.now(), lastPostTime);
-            long minutes = diff.toMinutes();
-            if(minutes < 3) throw new IllegalStateException(ERROR_NOT_EXPIRED_YET.getMessage());
-
-            postService.addPost(postRequest.getTitle());
-            lastPostTime = LocalDateTime.now();
-        }
+        postService.addPost(postRequest.getTitle());
         return ResponseEntity.ok("ok");
+    }
 
+    @GetMapping("/post/{id}")
+    public ResponseEntity<?> getPostById(@PathVariable Long id) {
+        return ResponseEntity.ok(postService.getPost(id));
+    }
+
+    @DeleteMapping("/post/{id}")
+    public ResponseEntity<?> deletePostById(@PathVariable Long id) {
+        postService.deletePost(id);
+        return ResponseEntity.ok("ok");
+    }
+
+    @PutMapping("/post")
+    public ResponseEntity<?> updatePostTitle(@RequestBody UpdateRequest updateRequest) {
+        postService.updatePost(updateRequest.id(), updateRequest.title());
+        return ResponseEntity.ok("ok");
     }
 
     @GetMapping("/posts")
@@ -50,27 +45,9 @@ public class PostController {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 
-    public Post getPostById(int id) {
-        return postService.getPost(id);
+    @GetMapping("/posts/search")
+    public ResponseEntity<?> searchPostsByKeyword(@RequestParam String keyword) {
+        return ResponseEntity.ok(postService.searchPosts(keyword));
     }
 
-    public boolean updatePostTitle(int updateId, String newTitle) {
-        return postService.updatePost(updateId, newTitle);
-    }
-
-    public boolean deletePostById(int deleteId) {
-        return postService.deletePost(deleteId);
-    }
-
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postService.searchPosts(keyword);
-    }
-
-    public boolean saveAsFile() throws IOException {
-        return postService.saveAsFile();
-    }
-
-    public boolean loadFromFile() throws IOException {
-        return postService.loadFromFile();
-    }
 }

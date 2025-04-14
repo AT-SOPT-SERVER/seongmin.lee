@@ -1,20 +1,15 @@
 package org.sopt.service;
 
 import org.sopt.domain.Post;
-import org.sopt.exception.ErrorMessage;
+import org.sopt.global.error.exception.BusinessException;
 import org.sopt.repository.PostRepository;
-import org.sopt.util.FileUtil;
-import org.sopt.util.IdGeneratorUtil;
 import org.sopt.validator.TitleValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 
-import static org.sopt.exception.ErrorMessage.*;
+import static org.sopt.global.error.ErrorCode.*;
 
 @Service
 public class PostService {
@@ -27,83 +22,46 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
+    @Transactional
     public void addPost(String title) {
         validateTitle(title);
 
-        Post post = new Post(IdGeneratorUtil.generateId(), title);
-        postRepository.save(post);
-
-        System.out.println(post.getTitle());
+        postRepository.save(new Post(title));
     }
 
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
-    public Post getPost(int id) {
-
-        return postRepository.findPostById(id);
+    public Post getPost(Long id) {
+        return postRepository.findById(id).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
     }
 
-    public boolean updatePost(int updateId, String newTitle) {
+    @Transactional
+    public void updatePost(Long updateId, String newTitle) {
         validateTitle(newTitle);
 
-        Post post = postRepository.findPostById(updateId);
-        if(post == null){
-            return false;
-        }
+        Post post = postRepository.findById(updateId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
         post.setTitle(newTitle);
-        return true;
     }
 
-    public boolean deletePost(int deleteId) {
-        return postRepository.deleteById(deleteId);
+    @Transactional
+    public void deletePost(Long deleteId) {
+
+        Post findPost = postRepository.findById(deleteId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+        postRepository.delete(findPost);
     }
 
     public List<Post> searchPosts(String keyword) {
-        return postRepository.findPostsByKeyword(keyword);
+        return postRepository.findPostsByTitleLike(keyword);
     }
 
-    public boolean saveAsFile() throws IOException {
-        List<Post> postList = postRepository.findAll();
-        StringBuilder sb = new StringBuilder();
-
-        postList.forEach(post -> sb.append(post.toString()).append("\n"));
-
-        return FileUtil.saveContentAsFile(sb.toString());
-    }
-
-    public boolean loadFromFile() throws IOException {
-        String content = FileUtil.loadContentFromFile();
-
-        List<Post> postList = postRepository.findAll();
-
-        postList.clear();
-
-        BufferedReader reader = new BufferedReader(new StringReader(content));
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            if (line.isBlank()) continue; // 빈 줄 스킵
-
-            String[] parts = line.split(" : ", 2);
-            if (parts.length < 2) continue;
-
-            int id = Integer.parseInt(parts[0]);
-            String title = parts[1];
-
-            Post post = new Post(id, title);
-            postList.add(post);
-        }
-
-        return true;
-    }
 
     private void validateTitle(String title) {
-        if(TitleValidator.isBlank(title)) throw new IllegalArgumentException(NOT_ALLOWED_BLANK_TITLE.getMessage());
-        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new IllegalArgumentException(TOO_LONG_TITLE.getMessage());
+        if(TitleValidator.isBlank(title)) throw new BusinessException(NOT_ALLOWED_BLANK_TITLE);
+        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new BusinessException(TOO_LONG_TITLE);
 
-        Post findPost = postRepository.findPostByTitle(title);
-        if(findPost != null) throw new IllegalStateException(DUPLICATED_TITLE.getMessage());
+        boolean present = postRepository.findPostByTitle(title).isPresent();
+        if(present) throw new BusinessException(DUPLICATED_TITLE);
     }
 }
