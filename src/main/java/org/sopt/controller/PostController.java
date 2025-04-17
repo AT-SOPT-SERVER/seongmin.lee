@@ -19,7 +19,7 @@ public class PostController {
     @PostMapping("/post")
     @RateLimit
     public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
-        postService.addPost(postRequest.getTitle());
+        postService.addPost(postRequest.title());
         return ResponseEntity.ok("ok");
     }
 
