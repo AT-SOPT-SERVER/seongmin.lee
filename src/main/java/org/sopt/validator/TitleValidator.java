@@ -1,9 +1,6 @@
 package org.sopt.validator;
 
-import java.text.BreakIterator;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static org.sopt.util.CodepointUtil.*;
 
 public class TitleValidator {
 
@@ -11,20 +8,46 @@ public class TitleValidator {
         return title.isBlank();
     }
 
-    public static boolean isExceedingTitleLimit(String title, int limit){
-
-        BreakIterator iterator = BreakIterator.getCharacterInstance(Locale.getDefault());
-        iterator.setText(title);
-
+    public static int lengthWithEmoji(String s){
         int count = 0;
-        int start = iterator.first();
+        int[] codePoints = s.codePoints().toArray();
 
-        while(true){
-            int end = iterator.next();
-            if(end == BreakIterator.DONE) break;
+        boolean zwjFlag = false;
+        boolean regionalFlag = false;
+
+        for (int codePoint : codePoints) {
+            if (isSkinToneModifier(codePoint)) continue;
+
+            if(isVS16(codePoint)) continue;
+
+            if (isZwj(codePoint)) {
+                zwjFlag = true;
+                continue;
+            }
+
+            if (isRegional(codePoint)) {
+                if (!regionalFlag) {
+                    regionalFlag = true;
+                    count++;
+                }
+                continue;
+            }
+
+            regionalFlag = false;
+
+            if (zwjFlag) {
+                zwjFlag = false;
+                continue;
+            }
+
             count++;
         }
-//        System.out.println("count = " + count);
-        return count > limit;
+
+        return count;
+    }
+
+
+    public static boolean isExceedingTitleLimit(String s, int limit){
+        return lengthWithEmoji(s) > limit;
     }
 }

@@ -31,8 +31,8 @@ public class Post {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(String newTitle) {
+        this.title = newTitle;
     }
 
     @Override
