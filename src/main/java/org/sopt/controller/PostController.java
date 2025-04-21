@@ -3,6 +3,7 @@ package org.sopt.controller;
 import org.sopt.aop.RateLimit;
 import org.sopt.dto.PostRequest;
 import org.sopt.dto.UpdateRequest;
+import org.sopt.global.result.ResultCode;
 import org.sopt.global.result.ResultResponse;
 import org.sopt.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -20,38 +21,40 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/post")
-    @RateLimit
+    @PostMapping("/posts")
+//    @RateLimit
     public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
-        postService.addPost(postRequest.title());
-        return ResponseEntity.ok(ResultResponse.of(HttpStatus.CREATED.value(), null));
+        URI location = URI.create("/posts/" + postService.addPost(postRequest.title()));
+
+        return ResponseEntity.created(location)
+                .body(ResultResponse.of(ResultCode.CREATED, null));
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/posts/{id}")
     public ResponseEntity<?> getPostById(@PathVariable Long id) {
-        return ResponseEntity.ok(postService.getPost(id));
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.getPost(id)));
     }
 
-    @DeleteMapping("/post/{id}")
+    @DeleteMapping("/posts/{id}")
     public ResponseEntity<?> deletePostById(@PathVariable Long id) {
         postService.deletePost(id);
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }
 
-    @PutMapping("/post")
-    public ResponseEntity<?> updatePostTitle(@RequestBody UpdateRequest updateRequest) {
-        postService.updatePost(updateRequest.id(), updateRequest.title());
-        return ResponseEntity.ok("ok");
+    @PutMapping("/posts/{id}")
+    public ResponseEntity<?> updatePostTitle(@PathVariable Long id, @RequestBody UpdateRequest updateRequest) {
+        postService.updatePost(id, updateRequest.title());
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }
 
     @GetMapping("/posts")
     public ResponseEntity<?> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.getAllPosts()));
     }
 
     @GetMapping("/posts/search")
     public ResponseEntity<?> searchPostsByKeyword(@RequestParam String keyword) {
-        return ResponseEntity.ok(postService.searchPosts(keyword));
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.searchPosts(keyword)));
     }
 
 }

@@ -23,10 +23,14 @@ public class PostService {
     }
 
     @Transactional
-    public void addPost(String title) {
+    public Long addPost(String title) {
         validateTitle(title);
 
-        postRepository.save(new Post(title));
+        Post newPost = new Post();
+        newPost.setTitle(title);
+        postRepository.save(newPost);
+
+        return newPost.getId();
     }
 
     public List<Post> getAllPosts() {

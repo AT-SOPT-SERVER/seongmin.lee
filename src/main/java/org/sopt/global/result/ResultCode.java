@@ -1,7 +1,8 @@
 package org.sopt.global.result;
 
 public enum ResultCode {
-    CREATED(201, "응답 성공");
+    CREATED(201, "응답 성공"),
+    SUCCESS(200, "응답 성공");
 
 
 
