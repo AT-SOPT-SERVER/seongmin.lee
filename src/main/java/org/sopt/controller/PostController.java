@@ -3,9 +3,13 @@ package org.sopt.controller;
 import org.sopt.aop.RateLimit;
 import org.sopt.dto.PostRequest;
 import org.sopt.dto.UpdateRequest;
+import org.sopt.global.result.ResultResponse;
 import org.sopt.service.PostService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 public class PostController {
@@ -20,7 +24,7 @@ public class PostController {
     @RateLimit
     public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
         postService.addPost(postRequest.title());
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(ResultResponse.of(HttpStatus.CREATED.value(), null));
     }
 
     @GetMapping("/post/{id}")

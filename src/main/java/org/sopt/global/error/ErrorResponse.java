@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class ErrorResponse {
 
-    private final String message;
-    private final int httpStatus;
+    private final String msg;
+    private final int code;
     private final LocalDateTime timestamp;
 
     public ErrorResponse(ErrorCode errorCode, LocalDateTime localDateTime){
-        this.message = errorCode.getMessage();
-        this.httpStatus = errorCode.getStatus();
+        this.msg = errorCode.getMsg();
+        this.code = errorCode.getStatus();
         this.timestamp = localDateTime;
     }
 
@@ -19,12 +19,12 @@ public class ErrorResponse {
     }
 
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public int getHttpStatus() {
-        return httpStatus;
+    public int getCode() {
+        return code;
     }
 
     public LocalDateTime getTimestamp() {

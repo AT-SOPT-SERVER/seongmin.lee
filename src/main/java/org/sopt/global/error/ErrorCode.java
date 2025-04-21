@@ -9,18 +9,18 @@ public enum ErrorCode {
     ERROR_NOT_EXPIRED_YET(403, "아직 유효시간이 지나지 않았습니다.");
 
     private final int status;
-    private final String message;
+    private final String msg;
 
-    ErrorCode(int status, String message){
+    ErrorCode(int status, String msg){
         this.status = status;
-        this.message = message;
+        this.msg = msg;
     }
 
     public int getStatus() {
         return status;
     }
 
-    public String getMessage(){
-        return message;
+    public String getMsg(){
+        return msg;
     }
 }
