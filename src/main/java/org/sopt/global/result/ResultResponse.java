@@ -18,10 +18,6 @@ public class ResultResponse {
         this.data = data;
     }
 
-    public static ResultResponse of(int code, Object data){
-        return new ResultResponse(code, "응답 성공", data);
-    }
-
     public static ResultResponse of(ResultCode resultCode, Object data){
         return new ResultResponse(resultCode.getCode(), resultCode.getMsg(), data);
     }
