@@ -63,7 +63,7 @@ public class PostService {
 
     private void validateTitle(String title) {
         if(TitleValidator.isBlank(title)) throw new BusinessException(NOT_ALLOWED_BLANK_TITLE);
-        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new BusinessException(TOO_LONG_TITLE);
+        if(TitleValidator.lengthWithEmoji(title) > TITLE_LIMIT) throw new BusinessException(TOO_LONG_TITLE);
 
         boolean present = postRepository.findPostByTitle(title).isPresent();
         if(present) throw new BusinessException(DUPLICATED_TITLE);

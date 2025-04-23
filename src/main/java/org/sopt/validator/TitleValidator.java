@@ -46,8 +46,4 @@ public class TitleValidator {
         return count;
     }
 
-
-    public static boolean isExceedingTitleLimit(String s, int limit){
-        return lengthWithEmoji(s) > limit;
-    }
 }
