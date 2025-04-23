@@ -1,18 +1,13 @@
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.sopt.validator.TitleValidator;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.stream.IntStream;
+import org.sopt.util.CodepointUtil;
+import org.sopt.validator.TextValidator;
 
 public class TitleValidatorTest {
 
     @Test
     void test(){
-        String s = "🤍🧒🏿😊👨‍👩🏿‍👧‍👦🐘👨‍👩‍👧‍👦❗👨‍🏭";
-        Assertions.assertThat(TitleValidator.lengthWithEmoji(s)).isEqualTo(8);
+        String s = "🤍🧒🏿😊👨‍👩🏿‍👧‍👦🐘👨‍👩‍👧‍👦❗👨‍🏭♑♒🅰️*️⃣#️⃣🏳️‍🌈🩷";
+        Assertions.assertThat(CodepointUtil.graphemeClusterLength(s)).isEqualTo(15);
     }
 }

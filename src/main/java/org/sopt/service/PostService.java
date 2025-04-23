@@ -3,7 +3,7 @@ package org.sopt.service;
 import org.sopt.domain.Post;
 import org.sopt.global.error.exception.BusinessException;
 import org.sopt.repository.PostRepository;
-import org.sopt.validator.TitleValidator;
+import org.sopt.validator.TextValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,8 +62,8 @@ public class PostService {
 
 
     private void validateTitle(String title) {
-        if(TitleValidator.isBlank(title)) throw new BusinessException(NOT_ALLOWED_BLANK_TITLE);
-        if(TitleValidator.lengthWithEmoji(title) > TITLE_LIMIT) throw new BusinessException(TOO_LONG_TITLE);
+        if(TextValidator.isBlank(title)) throw new BusinessException(NOT_ALLOWED_BLANK_TITLE);
+        if(TextValidator.isTextLengthBiggerThanLimit(title, TITLE_LIMIT)) throw new BusinessException(TOO_LONG_TITLE);
 
         boolean present = postRepository.findPostByTitle(title).isPresent();
         if(present) throw new BusinessException(DUPLICATED_TITLE);
