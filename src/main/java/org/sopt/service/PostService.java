@@ -57,7 +57,7 @@ public class PostService {
     }
 
     public List<Post> searchPosts(String keyword) {
-        return postRepository.findPostsByTitleLike(keyword);
+        return postRepository.findPostsByTitleContaining(keyword);
     }
 
 

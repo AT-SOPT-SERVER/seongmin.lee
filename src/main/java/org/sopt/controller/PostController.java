@@ -22,7 +22,7 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-//    @RateLimit
+    @RateLimit
     public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
         URI location = URI.create("/posts/" + postService.addPost(postRequest.title()));
 
