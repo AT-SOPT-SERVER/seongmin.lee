@@ -23,15 +23,12 @@ public class Post {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String newTitle) {
+    public void updateTitle(String newTitle) {
         this.title = newTitle;
     }
 

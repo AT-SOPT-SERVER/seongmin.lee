@@ -1,6 +1,9 @@
 package org.sopt.service;
 
 import org.sopt.domain.Post;
+import org.sopt.dto.PostListResponse;
+import org.sopt.dto.PostRequest;
+import org.sopt.dto.PostResponse;
 import org.sopt.global.error.exception.BusinessException;
 import org.sopt.repository.PostRepository;
 import org.sopt.validator.TextValidator;
@@ -23,22 +26,26 @@ public class PostService {
     }
 
     @Transactional
-    public Long addPost(String title) {
-        validateTitle(title);
+    public Long addPost(PostRequest postRequest) {
+        validateTitle(postRequest.title());
 
         Post newPost = new Post();
-        newPost.setTitle(title);
+        newPost.setTitle(postRequest.title());
         postRepository.save(newPost);
 
         return newPost.getId();
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public PostListResponse getAllPosts() {
+        List<PostResponse> postList = postRepository.findAll().stream()
+                .map(PostResponse::of)
+                .toList();
+        return PostListResponse.of(postList);
     }
 
-    public Post getPost(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+    public PostResponse getPost(Long id) {
+        Post findPost = postRepository.findById(id).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+        return PostResponse.of(findPost);
     }
 
     @Transactional
@@ -46,7 +53,7 @@ public class PostService {
         validateTitle(newTitle);
 
         Post post = postRepository.findById(updateId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
-        post.setTitle(newTitle);
+        post.updateTitle(newTitle);
     }
 
     @Transactional
@@ -56,8 +63,11 @@ public class PostService {
         postRepository.delete(findPost);
     }
 
-    public List<Post> searchPosts(String keyword) {
-        return postRepository.findPostsByTitleContaining(keyword);
+    public PostListResponse searchPosts(String keyword) {
+        List<PostResponse> postList = postRepository.findPostsByTitleContaining(keyword)
+                .stream()
+                .map(PostResponse::of).toList();
+        return PostListResponse.of(postList);
     }
 
 
