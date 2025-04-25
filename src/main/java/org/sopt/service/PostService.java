@@ -30,7 +30,7 @@ public class PostService {
         validateTitle(postRequest.title());
 
         Post newPost = new Post();
-        newPost.setTitle(postRequest.title());
+        newPost.updateTitle(postRequest.title());
         postRepository.save(newPost);
 
         return newPost.getId();
