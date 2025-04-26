@@ -4,6 +4,7 @@ import org.sopt.domain.Post;
 import org.sopt.dto.PostListResponse;
 import org.sopt.dto.PostRequest;
 import org.sopt.dto.PostResponse;
+import org.sopt.dto.UpdateRequest;
 import org.sopt.global.error.exception.BusinessException;
 import org.sopt.repository.PostRepository;
 import org.sopt.validator.TextValidator;
@@ -49,11 +50,11 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(Long updateId, String newTitle) {
-        validateTitle(newTitle);
+    public void updatePost(Long updateId, UpdateRequest updateRequest) {
+        validateTitle(updateRequest.title());
 
         Post post = postRepository.findById(updateId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
-        post.updateTitle(newTitle);
+        post.updateTitle(updateRequest.title());
     }
 
     @Transactional

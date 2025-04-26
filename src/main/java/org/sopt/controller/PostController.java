@@ -44,7 +44,7 @@ public class PostController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePostTitle(@PathVariable Long id, @RequestBody UpdateRequest updateRequest) {
-        postService.updatePost(id, updateRequest.title());
+        postService.updatePost(id, updateRequest);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }
 
