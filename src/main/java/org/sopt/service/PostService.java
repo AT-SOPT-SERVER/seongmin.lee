@@ -1,99 +1,82 @@
 package org.sopt.service;
 
 import org.sopt.domain.Post;
-import org.sopt.exception.ErrorMessage;
+import org.sopt.dto.PostListResponse;
+import org.sopt.dto.PostRequest;
+import org.sopt.dto.PostResponse;
+import org.sopt.dto.UpdateRequest;
+import org.sopt.global.error.exception.BusinessException;
 import org.sopt.repository.PostRepository;
-import org.sopt.util.FileUtil;
-import org.sopt.util.IdGeneratorUtil;
-import org.sopt.validator.TitleValidator;
+import org.sopt.validator.TextValidator;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 
-import static org.sopt.exception.ErrorMessage.*;
+import static org.sopt.global.error.ErrorCode.*;
 
+@Service
 public class PostService {
 
     private final int TITLE_LIMIT = 30;
 
-    private final PostRepository postRepository = new PostRepository();
-    public void addPost(String title) {
-        validateTitle(title);
+    private final PostRepository postRepository;
 
-        Post post = new Post(IdGeneratorUtil.generateId(), title);
-        postRepository.save(post);
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    @Transactional
+    public Long addPost(PostRequest postRequest) {
+        validateTitle(postRequest.title());
+
+        Post newPost = new Post();
+        newPost.updateTitle(postRequest.title());
+        postRepository.save(newPost);
+
+        return newPost.getId();
     }
 
-    public Post getPost(int id) {
-
-        return postRepository.findPostById(id);
+    public PostListResponse getAllPosts() {
+        List<PostResponse> postList = postRepository.findAll().stream()
+                .map(PostResponse::of)
+                .toList();
+        return PostListResponse.of(postList);
     }
 
-    public boolean updatePost(int updateId, String newTitle) {
-        validateTitle(newTitle);
-
-        Post post = postRepository.findPostById(updateId);
-        if(post == null){
-            return false;
-        }
-        post.setTitle(newTitle);
-        return true;
+    public PostResponse getPost(Long id) {
+        Post findPost = postRepository.findById(id).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+        return PostResponse.of(findPost);
     }
 
-    public boolean deletePost(int deleteId) {
-        return postRepository.deleteById(deleteId);
+    @Transactional
+    public void updatePost(Long updateId, UpdateRequest updateRequest) {
+        validateTitle(updateRequest.title());
+
+        Post post = postRepository.findById(updateId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+        post.updateTitle(updateRequest.title());
     }
 
-    public List<Post> searchPosts(String keyword) {
-        return postRepository.findPostsByKeyword(keyword);
+    @Transactional
+    public void deletePost(Long deleteId) {
+
+        Post findPost = postRepository.findById(deleteId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+        postRepository.delete(findPost);
     }
 
-    public boolean saveAsFile() throws IOException {
-        List<Post> postList = postRepository.findAll();
-        StringBuilder sb = new StringBuilder();
-
-        postList.forEach(post -> sb.append(post.toString()).append("\n"));
-
-        return FileUtil.saveContentAsFile(sb.toString());
+    public PostListResponse searchPosts(String keyword) {
+        List<PostResponse> postList = postRepository.findPostsByTitleContaining(keyword)
+                .stream()
+                .map(PostResponse::of).toList();
+        return PostListResponse.of(postList);
     }
 
-    public boolean loadFromFile() throws IOException {
-        String content = FileUtil.loadContentFromFile();
-
-        List<Post> postList = postRepository.findAll();
-
-        postList.clear();
-
-        BufferedReader reader = new BufferedReader(new StringReader(content));
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            if (line.isBlank()) continue; // 빈 줄 스킵
-
-            String[] parts = line.split(" : ", 2);
-            if (parts.length < 2) continue;
-
-            int id = Integer.parseInt(parts[0]);
-            String title = parts[1];
-
-            Post post = new Post(id, title);
-            postList.add(post);
-        }
-
-        return true;
-    }
 
     private void validateTitle(String title) {
-        if(TitleValidator.isBlank(title)) throw new IllegalArgumentException(NOT_ALLOWED_BLANK_TITLE.getMessage());
-        if(TitleValidator.isExceedingTitleLimit(title, TITLE_LIMIT)) throw new IllegalArgumentException(TOO_LONG_TITLE.getMessage());
+        if(TextValidator.isBlank(title)) throw new BusinessException(NOT_ALLOWED_BLANK_TITLE);
+        if(TextValidator.isTextLengthBiggerThanLimit(title, TITLE_LIMIT)) throw new BusinessException(TOO_LONG_TITLE);
 
-        Post findPost = postRepository.findPostByTitle(title);
-        if(findPost != null) throw new IllegalStateException(DUPLICATED_TITLE.getMessage());
+        boolean present = postRepository.findPostByTitle(title).isPresent();
+        if(present) throw new BusinessException(DUPLICATED_TITLE);
     }
 }

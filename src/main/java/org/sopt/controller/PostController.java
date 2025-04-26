@@ -1,62 +1,61 @@
 package org.sopt.controller;
 
-import org.sopt.domain.Post;
-import org.sopt.exception.ErrorMessage;
+import org.sopt.aop.RateLimit;
+import org.sopt.dto.PostRequest;
+import org.sopt.dto.UpdateRequest;
+import org.sopt.global.result.ResultCode;
+import org.sopt.global.result.ResultResponse;
 import org.sopt.service.PostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.net.URI;
 
-import static org.sopt.domain.Post.lastPostTime;
-import static org.sopt.exception.ErrorMessage.*;
-
+@RestController
+@RequestMapping("/posts")
 public class PostController {
 
-    private final PostService postService = new PostService();
+    private final PostService postService;
 
-    public void createPost(String title) {
-
-        if (lastPostTime == null){
-            postService.addPost(title);
-            lastPostTime = LocalDateTime.now();
-        }else {
-            Duration diff = Duration.between(LocalDateTime.now(), lastPostTime);
-            long minutes = diff.toMinutes();
-            if(minutes < 3) throw new IllegalStateException(ERROR_NOT_EXPIRED_YET.getMessage());
-
-            postService.addPost(title);
-            lastPostTime = LocalDateTime.now();
-        }
-
+    public PostController(PostService postService) {
+        this.postService = postService;
     }
 
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    @PostMapping
+    @RateLimit(tag = "createPost")
+    public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
+        URI location = URI.create("/posts/" + postService.addPost(postRequest));
+
+        return ResponseEntity.created(location)
+                .body(ResultResponse.of(ResultCode.CREATED, null));
     }
 
-    public Post getPostById(int id) {
-        return postService.getPost(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPostById(@PathVariable Long id) {
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.getPost(id)));
     }
 
-    public boolean updatePostTitle(int updateId, String newTitle) {
-        return postService.updatePost(updateId, newTitle);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePostById(@PathVariable Long id) {
+        postService.deletePost(id);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }
 
-    public boolean deletePostById(int deleteId) {
-        return postService.deletePost(deleteId);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePostTitle(@PathVariable Long id, @RequestBody UpdateRequest updateRequest) {
+        postService.updatePost(id, updateRequest);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }
 
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postService.searchPosts(keyword);
+    @GetMapping
+    public ResponseEntity<?> getAllPosts() {
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.getAllPosts()));
     }
 
-    public boolean saveAsFile() throws IOException {
-        return postService.saveAsFile();
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPostsByKeyword(@RequestParam String keyword) {
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.searchPosts(keyword)));
     }
 
-    public boolean loadFromFile() throws IOException {
-        return postService.loadFromFile();
-    }
 }
