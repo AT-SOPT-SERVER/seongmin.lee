@@ -42,6 +42,8 @@ public class CodepointUtil {
                 if (!regionalFlag) {
                     regionalFlag = true;
                     count++;
+                }else{
+                    regionalFlag = false;
                 }
                 continue;
             }
@@ -53,5 +55,38 @@ public class CodepointUtil {
             count++;
         }
         return count;
+    }
+
+    public static boolean graphemeClusterLengthBreakByLimit(String s, int limit){
+        int count = 0;
+        int[] codePoints = s.codePoints().toArray();
+
+        boolean zwjFlag = false;
+        boolean regionalFlag = false;
+
+        for (int codePoint : codePoints) {
+            if(count > limit) break;
+            if (isIgnored(codePoint)) continue;
+            if (isZwj(codePoint)) {
+                zwjFlag = true;
+                continue;
+            }
+            if (isRegional(codePoint)) {
+                if (!regionalFlag) {
+                    regionalFlag = true;
+                    count++;
+                }else{
+                    regionalFlag = false;
+                }
+                continue;
+            }
+            regionalFlag = false;
+            if (zwjFlag) {
+                zwjFlag = false;
+                continue;
+            }
+            count++;
+        }
+        return count > limit;
     }
 }

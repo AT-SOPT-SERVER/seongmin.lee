@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.sopt.global.error.ErrorCode.ERROR_NOT_EXPIRED_YET;
+import static org.sopt.global.error.ErrorCode.NOT_EXPIRED_YET;
 
 @Aspect
 @Component
@@ -37,7 +37,7 @@ public class RequestAspect {
         LocalDateTime last = lastRequestMap.get(key);
 
         if(last != null && Duration.between(last, LocalDateTime.now()).getSeconds() < rateLimit.intervalSeconds()){
-            throw new BusinessException(ERROR_NOT_EXPIRED_YET);
+            throw new BusinessException(NOT_EXPIRED_YET);
         }
 
         lastRequestMap.put(key, LocalDateTime.now());

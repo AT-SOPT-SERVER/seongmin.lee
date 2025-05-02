@@ -12,7 +12,7 @@ public class TextValidator {
 
     public static boolean isTextLengthBiggerThanLimit(String s, int limit){
 
-        return CodepointUtil.graphemeClusterLength(s) > limit;
+        return CodepointUtil.graphemeClusterLengthBreakByLimit(s, limit);
     }
 
 }
