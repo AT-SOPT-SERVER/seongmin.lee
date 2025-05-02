@@ -1,19 +1,18 @@
-package org.sopt.service;
+package org.sopt.post.service;
 
-import org.sopt.domain.Post;
-import org.sopt.domain.User;
-import org.sopt.dto.PostInfoListResponse;
-import org.sopt.dto.PostRequest;
-import org.sopt.dto.PostResponse;
-import org.sopt.dto.UpdateRequest;
+import org.sopt.post.domain.Post;
+import org.sopt.post.domain.PostTag;
+import org.sopt.user.domain.User;
+import org.sopt.post.dto.PostInfoListResponse;
+import org.sopt.post.dto.PostCreateRequest;
+import org.sopt.post.dto.PostResponse;
+import org.sopt.post.dto.PostUpdateRequest;
 import org.sopt.global.error.exception.BusinessException;
-import org.sopt.repository.PostRepository;
-import org.sopt.repository.UserRepository;
+import org.sopt.post.repository.PostRepository;
+import org.sopt.user.repository.UserRepository;
 import org.sopt.validator.TextValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.sopt.global.error.ErrorCode.*;
 
@@ -32,13 +31,13 @@ public class PostService {
     }
 
     @Transactional
-    public Long addPost(Long userId, PostRequest postRequest) {
+    public Long addPost(Long userId, PostCreateRequest postRequest) {
         validateTitle(postRequest.title());
         validateContent(postRequest.content());
 
         User findUser = findUser(userId);
 
-        Post newPost = Post.createPost(findUser, postRequest.title(), postRequest.content());
+        Post newPost = Post.createPost(findUser, postRequest.title(), postRequest.content(), postRequest.tag());
         postRepository.save(newPost);
 
         return newPost.getId();
@@ -50,28 +49,33 @@ public class PostService {
     }
 
     public PostResponse getPost(Long id) {
-        Post findPost = postRepository.findById(id).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+        Post findPost = findPost(id);
         return PostResponse.of(findPost);
     }
 
     @Transactional
-    public void updatePost(Long updateId, UpdateRequest updateRequest) {
+    public void updatePost(Long updateId, PostUpdateRequest updateRequest) {
         validateTitle(updateRequest.title());
         validateContent(updateRequest.content());
 
-        Post post = postRepository.findById(updateId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
-        post.updateTitle(updateRequest.title(), updateRequest.content());
+        Post findPost = findPost(updateId);
+        findPost.updatePost(updateRequest.title(), updateRequest.content(), updateRequest.tag());
     }
 
     @Transactional
     public void deletePost(Long deleteId) {
-
-        Post findPost = postRepository.findById(deleteId).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
+        Post findPost = findPost(deleteId);
         postRepository.delete(findPost);
     }
 
-    public PostInfoListResponse searchPosts(String keyword, String username) {
-        return PostInfoListResponse.of(postRepository.searchPost(keyword, username));
+
+    public PostInfoListResponse searchPosts(String keyword, String username, String tag) {
+        PostTag postTag = PostTag.from(tag);
+        return PostInfoListResponse.of(postRepository.searchPost(keyword, username, postTag));
+    }
+
+    private Post findPost(Long id) {
+        return postRepository.findById(id).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
     }
 
     private User findUser(Long userId) {
@@ -85,13 +89,12 @@ public class PostService {
         if(isTitlePresent(title)) throw new BusinessException(DUPLICATED_TITLE);
     }
 
-    private boolean isTitlePresent(String title) {
-        return postRepository.findPostByTitle(title).isPresent();
-    }
-
     private void validateContent(String content) {
         if(TextValidator.isBlank(content)) throw new BusinessException(NOT_ALLOWED_BLANK_CONTENT);
-        // 성능 이슈가 있을 수 있음, TextValidator에서 100000 글자에 대해서 전부 count하게 될 수도 있음
         if(TextValidator.isTextLengthBiggerThanLimit(content, CONTENT_LIMIT)) throw new BusinessException(TOO_LONG_CONTENT);
+    }
+
+    private boolean isTitlePresent(String title) {
+        return !postRepository.findPostsByTitle(title).isEmpty();
     }
 }

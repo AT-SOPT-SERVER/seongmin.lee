@@ -1,9 +1,9 @@
-package org.sopt.controller;
+package org.sopt.user.controller;
 
-import org.sopt.dto.UserCreateRequest;
+import org.sopt.user.dto.UserCreateRequest;
 import org.sopt.global.result.ResultCode;
 import org.sopt.global.result.ResultResponse;
-import org.sopt.service.UserService;
+import org.sopt.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +24,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ResultResponse<Void>> join(@RequestBody UserCreateRequest request){
-        Long id = userService.createUser(request);
+        Long id = userService.join(request);
         URI location = URI.create("/users" + id);
         return ResponseEntity.created(location)
                 .body(ResultResponse.of(ResultCode.CREATED, null));

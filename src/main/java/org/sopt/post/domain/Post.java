@@ -1,9 +1,7 @@
-package org.sopt.domain;
+package org.sopt.post.domain;
 
-import com.querydsl.core.annotations.QueryProjection;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import org.sopt.user.domain.User;
 
 @Entity
 public class Post {
@@ -51,15 +49,17 @@ public class Post {
         return tag;
     }
 
-    public void updateTitle(String newTitle, String newContent) {
+    public void updatePost(String newTitle, String newContent, String tag) {
         this.title = newTitle;
         this.content = newContent;
+        this.tag = PostTag.from(tag);
     }
 
-    public static Post createPost(User findUser, String title, String content) {
+    public static Post createPost(User findUser, String title, String content, String tag) {
         Post newPost = new Post();
         newPost.title = title;
         newPost.content = content;
+        newPost.tag = PostTag.from(tag);
         newPost.user = findUser;
         findUser.getPostList().add(newPost);
         return newPost;

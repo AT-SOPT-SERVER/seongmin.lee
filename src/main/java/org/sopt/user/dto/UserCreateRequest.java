@@ -1,4 +1,4 @@
-package org.sopt.dto;
+package org.sopt.user.dto;
 
 public record UserCreateRequest(String name, String email) {
 }

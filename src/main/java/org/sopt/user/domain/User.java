@@ -1,7 +1,7 @@
-package org.sopt.domain;
+package org.sopt.user.domain;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import org.sopt.post.domain.Post;
 
 import java.util.ArrayList;
 import java.util.List;

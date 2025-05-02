@@ -1,9 +1,9 @@
-package org.sopt.service;
+package org.sopt.user.service;
 
-import org.sopt.domain.User;
-import org.sopt.dto.UserCreateRequest;
+import org.sopt.user.domain.User;
+import org.sopt.user.dto.UserCreateRequest;
 import org.sopt.global.error.exception.BusinessException;
-import org.sopt.repository.UserRepository;
+import org.sopt.user.repository.UserRepository;
 import org.sopt.validator.TextValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class UserService {
     }
 
     @Transactional
-    public Long createUser(UserCreateRequest request){
+    public Long join(UserCreateRequest request){
 
         validateUsername(request.name());
 

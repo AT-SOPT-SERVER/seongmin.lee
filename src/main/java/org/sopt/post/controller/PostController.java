@@ -1,14 +1,13 @@
-package org.sopt.controller;
+package org.sopt.post.controller;
 
 import org.sopt.aop.RateLimit;
-import org.sopt.dto.PostInfoListResponse;
-import org.sopt.dto.PostRequest;
-import org.sopt.dto.PostResponse;
-import org.sopt.dto.UpdateRequest;
+import org.sopt.post.dto.PostInfoListResponse;
+import org.sopt.post.dto.PostCreateRequest;
+import org.sopt.post.dto.PostResponse;
+import org.sopt.post.dto.PostUpdateRequest;
 import org.sopt.global.result.ResultCode;
 import org.sopt.global.result.ResultResponse;
-import org.sopt.service.PostService;
-import org.springframework.http.HttpStatus;
+import org.sopt.post.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +24,8 @@ public class PostController {
     }
 
     @PostMapping
-//    @RateLimit(tag = "createPost")
-    public ResponseEntity<ResultResponse<Void>> createPost(@RequestHeader Long userId, @RequestBody PostRequest postRequest) {
+    @RateLimit(tag = "createPost")
+    public ResponseEntity<ResultResponse<Void>> createPost(@RequestHeader Long userId, @RequestBody PostCreateRequest postRequest) {
         URI location = URI.create("/posts/" + postService.addPost(userId, postRequest));
 
         return ResponseEntity.created(location)
@@ -45,7 +44,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResultResponse<Void>> updatePostTitle(@PathVariable Long id, @RequestBody UpdateRequest updateRequest) {
+    public ResponseEntity<ResultResponse<Void>> updatePostTitle(@PathVariable Long id, @RequestBody PostUpdateRequest updateRequest) {
         postService.updatePost(id, updateRequest);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }
@@ -56,8 +55,8 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResultResponse<PostInfoListResponse>> searchPostsByKeyword(@RequestParam String keyword, @RequestParam String username) {
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.searchPosts(keyword, username)));
+    public ResponseEntity<ResultResponse<PostInfoListResponse>> searchPostsByKeyword(@RequestParam String keyword, @RequestParam String username, @RequestParam String tag) {
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.searchPosts(keyword, username, tag)));
     }
 
 }

@@ -1,6 +1,6 @@
-package org.sopt.dto;
+package org.sopt.post.dto;
 
-import org.sopt.domain.Post;
+import org.sopt.post.domain.Post;
 
 import java.util.List;
 

@@ -1,11 +1,12 @@
-package org.sopt.repository;
+package org.sopt.post.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.sopt.domain.Post;
+import org.sopt.post.domain.Post;
 import org.sopt.domain.QPost;
 import org.sopt.domain.QUser;
+import org.sopt.post.domain.PostTag;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     @Override
-    public List<Post> searchPost(String title, String username) {
+    public List<Post> searchPost(String title, String username, PostTag tag) {
         QPost post = QPost.post;
         QUser user = QUser.user;
 
@@ -27,7 +28,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .join(post.user, user).fetchJoin()
                 .where(
                         titleContains(title),
-                        usernameContains(username)
+                        usernameContains(username),
+                        tagEquals(tag)
                 )
                 .fetch();
     }
@@ -38,5 +40,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
 
     private BooleanExpression usernameContains(String username){
         return (username != null && username.isEmpty()) ? QPost.post.user.name.containsIgnoreCase(username) : null;
+    }
+
+    private BooleanExpression tagEquals(PostTag tag){
+        return tag != null ? QPost.post.tag.eq(tag) : null;
     }
 }

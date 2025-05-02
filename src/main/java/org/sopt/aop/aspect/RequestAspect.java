@@ -54,7 +54,6 @@ public class RequestAspect {
         if (ip == null || ip.isEmpty()) {
             ip = request.getRemoteAddr();
         }
-        System.out.println("ip = " + ip);
         return ip;
     }
 
