@@ -24,7 +24,7 @@ public class PostController {
     }
 
     @PostMapping
-    @RateLimit(tag = "createPost")
+//    @RateLimit(tag = "createPost")
     public ResponseEntity<ResultResponse<Void>> createPost(@RequestHeader Long userId, @RequestBody PostCreateRequest postRequest) {
         URI location = URI.create("/posts/" + postService.addPost(userId, postRequest));
 

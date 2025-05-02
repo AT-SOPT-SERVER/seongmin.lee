@@ -4,9 +4,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.sopt.post.domain.Post;
-import org.sopt.domain.QPost;
-import org.sopt.domain.QUser;
 import org.sopt.post.domain.PostTag;
+import org.sopt.post.domain.QPost;
+import org.sopt.user.domain.QUser;
 
 import java.util.List;
 
@@ -35,11 +35,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     private BooleanExpression titleContains(String title){
-        return (title != null && title.isEmpty()) ? QPost.post.title.containsIgnoreCase(title) : null;
+        return (title != null && !title.isEmpty()) ? QPost.post.title.containsIgnoreCase(title) : null;
     }
 
     private BooleanExpression usernameContains(String username){
-        return (username != null && username.isEmpty()) ? QPost.post.user.name.containsIgnoreCase(username) : null;
+        return (username != null && !username.isEmpty()) ? QPost.post.user.name.containsIgnoreCase(username) : null;
     }
 
     private BooleanExpression tagEquals(PostTag tag){
