@@ -16,7 +16,7 @@ public class Post {
     @Column(length = 1000, nullable = false)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
