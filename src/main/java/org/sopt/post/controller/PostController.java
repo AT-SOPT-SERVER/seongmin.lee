@@ -24,7 +24,10 @@ public class PostController {
 
     @PostMapping
 //    @RateLimit(tag = "createPost")
-    public ResponseEntity<ResultResponse<Void>> createPost(@RequestHeader Long userId, @RequestBody PostCreateRequest postRequest) {
+    public ResponseEntity<ResultResponse<Void>> createPost(
+            @RequestHeader Long userId,
+            @RequestBody PostCreateRequest postRequest
+    ) {
         URI location = URI.create("/posts/" + postService.addPost(userId, postRequest));
 
         return ResponseEntity.created(location)
@@ -32,18 +35,25 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<PostResponse>> getPostById(@PathVariable Long id) {
+    public ResponseEntity<ResultResponse<PostResponse>> getPostById(
+            @PathVariable Long id
+    ) {
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.getPost(id)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResultResponse<Void>> deletePostById(@PathVariable Long id) {
+    public ResponseEntity<ResultResponse<Void>> deletePostById(
+            @PathVariable Long id
+    ) {
         postService.deletePost(id);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResultResponse<Void>> updatePostTitle(@PathVariable Long id, @RequestBody PostUpdateRequest updateRequest) {
+    public ResponseEntity<ResultResponse<Void>> updatePostTitle(
+            @PathVariable Long id,
+            @RequestBody PostUpdateRequest updateRequest
+    ) {
         postService.updatePost(id, updateRequest);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }

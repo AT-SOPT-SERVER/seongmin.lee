@@ -3,8 +3,12 @@ package org.sopt.comment.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.sopt.global.entity.BaseTimeEntity;
+import org.sopt.like.domain.CommentLike;
 import org.sopt.post.domain.Post;
 import org.sopt.user.domain.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,6 +25,9 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @OneToMany(mappedBy = "comment", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<CommentLike> likes = new ArrayList<>();
 
     protected Comment(){
 

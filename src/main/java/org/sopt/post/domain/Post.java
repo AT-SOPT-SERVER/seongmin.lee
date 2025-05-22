@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.sopt.comment.domain.Comment;
 import org.sopt.global.entity.BaseTimeEntity;
+import org.sopt.like.domain.PostLike;
 import org.sopt.post.domain.enums.PostTag;
 import org.sopt.user.domain.User;
 
@@ -34,6 +35,9 @@ public class Post extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<PostLike> likes = new ArrayList<>();
 
     public Post() {
     }

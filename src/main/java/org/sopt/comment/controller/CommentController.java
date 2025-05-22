@@ -26,7 +26,11 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<ResultResponse<Void>> updateComment(@RequestHeader(name = "Authorization") Long userId, @PathVariable Long commentId, CommentUpdateRequest request){
+    public ResponseEntity<ResultResponse<Void>> updateComment(
+            @RequestHeader(name = "Authorization") Long userId,
+            @PathVariable Long commentId,
+            CommentUpdateRequest request
+    ){
         commentManagementFacade.updateComment(userId, commentId, request);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
     }

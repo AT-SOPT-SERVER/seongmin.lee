@@ -1,5 +1,7 @@
 package org.sopt.post.service;
 
+import org.sopt.comment.domain.Comment;
+import org.sopt.comment.dto.response.CommentResponse;
 import org.sopt.post.domain.Post;
 import org.sopt.post.domain.enums.PostTag;
 import org.sopt.user.domain.User;
@@ -16,6 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.sopt.global.error.ErrorCode.*;
 
@@ -48,9 +53,14 @@ public class PostService {
 
 
 
+    // 댓글 좋아요 개수 구하는 로직 비동기 처리 예정
     public PostResponse getPost(Long id) {
         Post findPost = findPost(id);
-        return PostResponse.of(findPost);
+        List<Comment> comments = findPost.getComments();
+        return PostResponse.of(findPost, comments.stream()
+                .map(CommentResponse::from)
+                .collect(Collectors.toList())
+        );
     }
 
     @Transactional
