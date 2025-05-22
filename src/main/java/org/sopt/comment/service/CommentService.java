@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final int MAX_CONTENT_LENGTH = 300;
+    private static final int MAX_CONTENT_LENGTH = 300;
 
     public Long addComment(User user, Post post, CommentCreateRequest request){
         validateContent(request.content());

@@ -1,10 +1,9 @@
 package org.sopt.post.controller;
 
-import org.sopt.aop.RateLimit;
-import org.sopt.post.dto.PostInfoListResponse;
-import org.sopt.post.dto.PostCreateRequest;
-import org.sopt.post.dto.PostResponse;
-import org.sopt.post.dto.PostUpdateRequest;
+import org.sopt.post.dto.response.PostInfoListResponse;
+import org.sopt.post.dto.request.PostCreateRequest;
+import org.sopt.post.dto.response.PostResponse;
+import org.sopt.post.dto.request.PostUpdateRequest;
 import org.sopt.global.result.ResultCode;
 import org.sopt.global.result.ResultResponse;
 import org.sopt.post.service.PostService;
@@ -50,13 +49,22 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<ResultResponse<PostInfoListResponse>> getAllPosts(@RequestHeader Long userId) {
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.getAllPosts(userId)));
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<ResultResponse<PostInfoListResponse>> searchPostsByKeyword(@RequestParam String keyword, @RequestParam String username, @RequestParam String tag) {
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.searchPosts(keyword, username, tag)));
+    public ResponseEntity<ResultResponse<PostInfoListResponse>> getPosts(
+            @RequestHeader(required = false) Long userId,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String tag,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, postService.searchPosts(
+                userId,
+                keyword,
+                username,
+                tag,
+                page,
+                size
+        )));
     }
 
 }

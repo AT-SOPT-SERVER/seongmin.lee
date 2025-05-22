@@ -1,16 +1,19 @@
 package org.sopt.post.service;
 
 import org.sopt.post.domain.Post;
-import org.sopt.post.domain.PostTag;
+import org.sopt.post.domain.enums.PostTag;
 import org.sopt.user.domain.User;
-import org.sopt.post.dto.PostInfoListResponse;
-import org.sopt.post.dto.PostCreateRequest;
-import org.sopt.post.dto.PostResponse;
-import org.sopt.post.dto.PostUpdateRequest;
+import org.sopt.post.dto.response.PostInfoListResponse;
+import org.sopt.post.dto.request.PostCreateRequest;
+import org.sopt.post.dto.response.PostResponse;
+import org.sopt.post.dto.request.PostUpdateRequest;
 import org.sopt.global.error.exception.BusinessException;
 import org.sopt.post.repository.PostRepository;
 import org.sopt.user.repository.UserRepository;
 import org.sopt.validator.TextValidator;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +22,8 @@ import static org.sopt.global.error.ErrorCode.*;
 @Service
 public class PostService {
 
-    private final int TITLE_LIMIT = 30;
-    private final int CONTENT_LIMIT = 1000;
+    private static final int TITLE_LIMIT = 30;
+    private static final int CONTENT_LIMIT = 1000;
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -43,10 +46,7 @@ public class PostService {
         return newPost.getId();
     }
 
-    public PostInfoListResponse getAllPosts(Long userId) {
-        User findUser = findUser(userId);
-        return PostInfoListResponse.of(postRepository.findByUser(findUser));
-    }
+
 
     public PostResponse getPost(Long id) {
         Post findPost = findPost(id);
@@ -69,9 +69,10 @@ public class PostService {
     }
 
 
-    public PostInfoListResponse searchPosts(String keyword, String username, String tag) {
+    public PostInfoListResponse searchPosts(Long userId, String keyword, String username, String tag, int page, int size) {
         PostTag postTag = PostTag.from(tag);
-        return PostInfoListResponse.of(postRepository.searchPost(keyword, username, postTag));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdTime"));
+        return PostInfoListResponse.from(postRepository.searchPost(userId, keyword, username, postTag, pageable));
     }
 
     public Post findPost(Long id) {

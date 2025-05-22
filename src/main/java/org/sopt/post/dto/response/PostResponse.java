@@ -1,7 +1,7 @@
-package org.sopt.post.dto;
+package org.sopt.post.dto.response;
 
 import org.sopt.post.domain.Post;
-import org.sopt.post.domain.PostTag;
+import org.sopt.post.domain.enums.PostTag;
 
 public record PostResponse(Long id, String title, String content, PostTag tag, Long userId, String username) {
 

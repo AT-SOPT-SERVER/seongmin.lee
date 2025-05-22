@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.sopt.comment.domain.Comment;
 import org.sopt.global.entity.BaseTimeEntity;
+import org.sopt.post.domain.enums.PostTag;
 import org.sopt.user.domain.User;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@Table(indexes = @Index(name = "idx_post_created_time", columnList = "createdTime DESC"))
 public class Post extends BaseTimeEntity {
 
     @Id

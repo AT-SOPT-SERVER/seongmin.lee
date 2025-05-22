@@ -4,11 +4,15 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.sopt.post.domain.Post;
-import org.sopt.post.domain.PostTag;
+import org.sopt.post.domain.enums.PostTag;
 import org.sopt.post.domain.QPost;
 import org.sopt.user.domain.QUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PostRepositoryImpl implements PostRepositoryCustom{
 
@@ -19,11 +23,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     @Override
-    public List<Post> searchPost(String title, String username, PostTag tag) {
+    public Page<Post> searchPost(Long userId, String title, String username, PostTag tag, Pageable pageable) {
         QPost post = QPost.post;
         QUser user = QUser.user;
 
-        return queryFactory
+        List<Post> content =  queryFactory
                 .selectFrom(post)
                 .join(post.user, user).fetchJoin()
                 .where(
@@ -31,7 +35,23 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                         usernameContains(username),
                         tagEquals(tag)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(post.createdTime.desc())
                 .fetch();
+
+        Long total = queryFactory
+                .select(post.count())
+                .from(post)
+                .join(post.user, user)
+                .where(
+                        titleContains(title),
+                        usernameContains(username),
+                        tagEquals(tag)
+                )
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, Optional.ofNullable(total).orElse(0L));
     }
 
     private BooleanExpression titleContains(String title){
