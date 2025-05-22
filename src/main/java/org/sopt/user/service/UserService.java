@@ -22,7 +22,7 @@ public class UserService {
     }
 
     @Transactional
-    public Long join(UserCreateRequest request){
+    public Long createUser(UserCreateRequest request){
 
         validateUsername(request.name());
 
