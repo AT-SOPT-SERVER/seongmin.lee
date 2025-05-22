@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e){
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse errorResponse = ErrorResponse.of(errorCode);
@@ -23,17 +23,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorCode.getStatus()));
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(NoHandlerFoundException.class)
     protected ResponseEntity<ErrorResponse> handleNotFoundException(NoResourceFoundException e){
         return new ResponseEntity<>(ErrorResponse.of(ErrorCode.NOT_FOUND_ERROR), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<ErrorResponse> handlerHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
         return new ResponseEntity<>(ErrorResponse.of(ErrorCode.NOT_SUPPORTED_METHOD_ERROR), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<ErrorResponse> handleInternalServerError(RuntimeException e){
         return new ResponseEntity<>(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
