@@ -8,8 +8,7 @@ import org.sopt.validator.TextValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.sopt.global.error.ErrorCode.NOT_ALLOWED_BLANK_USERNAME;
-import static org.sopt.global.error.ErrorCode.TOO_LONG_USERNAME;
+import static org.sopt.global.error.ErrorCode.*;
 
 @Service
 public class UserService {
@@ -30,6 +29,10 @@ public class UserService {
         userRepository.save(newUser);
 
         return newUser.getId();
+    }
+
+    public User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
     }
 
     private void validateUsername(String name) {

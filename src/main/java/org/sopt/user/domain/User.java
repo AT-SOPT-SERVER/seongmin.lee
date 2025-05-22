@@ -1,13 +1,17 @@
 package org.sopt.user.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import org.sopt.comment.domain.Comment;
+import org.sopt.global.entity.BaseTimeEntity;
 import org.sopt.post.domain.Post;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +26,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> postList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+
     protected User() {
     }
 
@@ -34,19 +41,4 @@ public class User {
         return new User(name, email);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public List<Post> getPostList(){
-        return postList;
-    }
 }

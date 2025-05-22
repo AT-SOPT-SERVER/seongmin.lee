@@ -74,24 +74,24 @@ public class PostService {
         return PostInfoListResponse.of(postRepository.searchPost(keyword, username, postTag));
     }
 
-    private Post findPost(Long id) {
+    public Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() -> new BusinessException(POST_NOT_FOUND));
     }
 
-    private User findUser(Long userId) {
+    public User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
     }
 
 
     private void validateTitle(String title) {
         if(TextValidator.isBlank(title)) throw new BusinessException(NOT_ALLOWED_BLANK_TITLE);
-        if(TextValidator.isTextLengthBiggerThanLimit(title, TITLE_LIMIT)) throw new BusinessException(TOO_LONG_TITLE);
+        if(TextValidator.isTextLengthBiggerThanLimit(title, TITLE_LIMIT)) throw new BusinessException(TOO_LONG_POST_TITLE);
         if(isTitlePresent(title)) throw new BusinessException(DUPLICATED_TITLE);
     }
 
     private void validateContent(String content) {
         if(TextValidator.isBlank(content)) throw new BusinessException(NOT_ALLOWED_BLANK_CONTENT);
-        if(TextValidator.isTextLengthBiggerThanLimit(content, CONTENT_LIMIT)) throw new BusinessException(TOO_LONG_CONTENT);
+        if(TextValidator.isTextLengthBiggerThanLimit(content, CONTENT_LIMIT)) throw new BusinessException(TOO_LONG_POST_CONTENT);
     }
 
     private boolean isTitlePresent(String title) {

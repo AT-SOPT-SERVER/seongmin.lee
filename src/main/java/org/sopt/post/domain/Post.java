@@ -1,10 +1,17 @@
 package org.sopt.post.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import org.sopt.comment.domain.Comment;
+import org.sopt.global.entity.BaseTimeEntity;
 import org.sopt.user.domain.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 @Entity
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +30,9 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private PostTag tag;
 
+    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
     public Post() {
     }
 
@@ -30,24 +40,6 @@ public class Post {
         this.title = title;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-
-    public String getTitle() {
-        return title;
-    }
-    public String getContent(){
-        return content;
-    }
-
-    public User getUser(){
-        return user;
-    }
-    public PostTag getTag() {
-        return tag;
-    }
 
     public void updatePost(String newTitle, String newContent, String tag) {
         this.title = newTitle;
