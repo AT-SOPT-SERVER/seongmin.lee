@@ -2,6 +2,7 @@ package org.sopt.post.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 import org.sopt.comment.domain.Comment;
 import org.sopt.global.entity.BaseTimeEntity;
 import org.sopt.like.domain.PostLike;
@@ -30,8 +31,11 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ElementCollection
+    @CollectionTable(joinColumns = @JoinColumn(name = "post_id"))
+    @BatchSize(size = 50)
     @Enumerated(EnumType.STRING)
-    private PostTag tag;
+    private List<PostTag> tags;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
@@ -47,17 +51,17 @@ public class Post extends BaseTimeEntity {
     }
 
 
-    public void updatePost(String newTitle, String newContent, String tag) {
+    public void updatePost(String newTitle, String newContent, List<PostTag> tags) {
         this.title = newTitle;
         this.content = newContent;
-        this.tag = PostTag.from(tag);
+        this.tags = tags;
     }
 
-    public static Post createPost(User findUser, String title, String content, String tag) {
+    public static Post createPost(User findUser, String title, String content, List<PostTag> tags) {
         Post newPost = new Post();
         newPost.title = title;
         newPost.content = content;
-        newPost.tag = PostTag.from(tag);
+        newPost.tags = tags;
         newPost.user = findUser;
         findUser.getPostList().add(newPost);
         return newPost;

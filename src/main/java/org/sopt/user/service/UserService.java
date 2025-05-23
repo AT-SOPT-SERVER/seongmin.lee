@@ -13,7 +13,7 @@ import static org.sopt.global.error.ErrorCode.*;
 @Service
 public class UserService {
 
-    private final int USERNAME_LIMIT = 10;
+    private static final int MAX_USERNAME = 10;
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository){
@@ -37,6 +37,6 @@ public class UserService {
 
     private void validateUsername(String name) {
         if(name == null || name.isEmpty() || name.isBlank()) throw new BusinessException(NOT_ALLOWED_BLANK_USERNAME);
-        if(TextValidator.isTextLengthBiggerThanLimit(name, USERNAME_LIMIT)) throw new BusinessException(TOO_LONG_USERNAME);
+        if(TextValidator.isTextLengthBiggerThanLimit(name, MAX_USERNAME)) throw new BusinessException(TOO_LONG_USERNAME);
     }
 }

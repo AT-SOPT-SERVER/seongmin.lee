@@ -19,4 +19,5 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
     @Query("select p from Post p join fetch p.user where p.user = :user")
     List<Post> findByUser(User user);
 
+    boolean existsByTitle(String title);
 }

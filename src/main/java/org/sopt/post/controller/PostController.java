@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -63,7 +64,7 @@ public class PostController {
             @RequestHeader(required = false) Long userId,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String username,
-            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) List<String> tags,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -71,7 +72,7 @@ public class PostController {
                 userId,
                 keyword,
                 username,
-                tag,
+                tags,
                 page,
                 size
         )));

@@ -1,5 +1,7 @@
 package org.sopt.post.dto.request;
 
-public record PostUpdateRequest(String title, String content, String tag) {
+import java.util.List;
+
+public record PostUpdateRequest(String title, String content, List<String> tags) {
 
 }

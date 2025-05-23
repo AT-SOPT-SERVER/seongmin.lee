@@ -23,17 +23,19 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     @Override
-    public Page<Post> searchPost(Long userId, String title, String username, PostTag tag, Pageable pageable) {
+    public Page<Post> searchPost(Long userId, String title, String username, List<PostTag> tags, Pageable pageable) {
         QPost post = QPost.post;
         QUser user = QUser.user;
 
         List<Post> content =  queryFactory
                 .selectFrom(post)
+                .distinct()
                 .join(post.user, user).fetchJoin()
                 .where(
+                        userIdEq(userId),
                         titleContains(title),
                         usernameContains(username),
-                        tagEquals(tag)
+                        tagIn(tags)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -41,17 +43,23 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .fetch();
 
         Long total = queryFactory
-                .select(post.count())
+                .select(post.id.countDistinct())
+                .distinct()
                 .from(post)
                 .join(post.user, user)
                 .where(
+                        userIdEq(userId),
                         titleContains(title),
                         usernameContains(username),
-                        tagEquals(tag)
+                        tagIn(tags)
                 )
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, Optional.ofNullable(total).orElse(0L));
+    }
+
+    private BooleanExpression userIdEq(Long userId){
+        return (userId != null) ? QPost.post.user.id.eq(userId) : null;
     }
 
     private BooleanExpression titleContains(String title){
@@ -62,7 +70,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return (username != null && !username.isEmpty()) ? QPost.post.user.name.containsIgnoreCase(username) : null;
     }
 
-    private BooleanExpression tagEquals(PostTag tag){
-        return tag != null ? QPost.post.tag.eq(tag) : null;
+    private BooleanExpression tagIn(List<PostTag> tags){
+        return (tags != null && tags.isEmpty()) ? QPost.post.tags.any().in(tags) : null;
     }
 }

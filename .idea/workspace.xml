@@ -4,11 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="baf6dc9b-72b3-4935-b8c8-ef4ce5e02dfb" name="Changes" comment="리드미 파일 추가">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="baf6dc9b-72b3-4935-b8c8-ef4ce5e02dfb" name="Changes" comment="#10 [FEAT] 좋아요 기능 구현">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/global/error/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/global/error/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/CommentLikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/CommentLikeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/PostLikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/PostLikeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/enums/PostTag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/enums/PostTag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostCreateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostUpdateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryCustom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryCustom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/user/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +34,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand />
@@ -31,6 +45,14 @@
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Record" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -55,21 +77,89 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "seminar1",
-    "last_opened_file_path": "C:/Users/LSM/study/SOPT/seongmin.lee",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;seminar6&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/LSM/study/SOPT/seongmin.lee&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.sopt.like.service" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.seongmin.lee [build]">
+    <configuration name="seongmin.lee [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="seongmin.lee [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="assignment.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.sopt.Main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.seongmin.lee [build]" />
+        <item itemvalue="Gradle.seongmin.lee [clean]" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -80,7 +170,41 @@
       <updated>1743678209174</updated>
       <workItem from="1743678209892" duration="406000" />
       <workItem from="1744119616003" duration="676000" />
+      <workItem from="1747988063770" duration="3907000" />
     </task>
+    <task id="LOCAL-00001" summary="#10 [REFACTOR] UserService 메서드 명 변경">
+      <option name="closed" value="true" />
+      <created>1747902301581</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1747902301581</updated>
+    </task>
+    <task id="LOCAL-00002" summary="#10 [FEAT] 댓글 기능 추가">
+      <option name="closed" value="true" />
+      <created>1747917326365</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1747917326365</updated>
+    </task>
+    <task id="LOCAL-00003" summary="#10 [FEAT] 페이지네이션 적용">
+      <option name="closed" value="true" />
+      <created>1747927164180</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747927164180</updated>
+    </task>
+    <task id="LOCAL-00004" summary="#10 [FEAT] 좋아요 기능 구현">
+      <option name="closed" value="true" />
+      <created>1747937009954</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1747937009954</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -96,5 +220,13 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="#7 [FEAT] 3주차 과제 진행중 3" />
+    <MESSAGE value="#10 [REFACTOR] UserService 메서드 명 변경" />
+    <MESSAGE value="#10 [FEAT] 댓글 기능 추가" />
+    <MESSAGE value="#10 [FEAT] 페이지네이션 적용" />
+    <MESSAGE value="#10 [FEAT] 좋아요 기능 구현" />
+    <option name="LAST_COMMIT_MESSAGE" value="#10 [FEAT] 좋아요 기능 구현" />
   </component>
 </project>
