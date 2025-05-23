@@ -4,11 +4,15 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.sopt.post.domain.Post;
-import org.sopt.post.domain.PostTag;
+import org.sopt.post.domain.enums.PostTag;
 import org.sopt.post.domain.QPost;
 import org.sopt.user.domain.QUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PostRepositoryImpl implements PostRepositoryCustom{
 
@@ -19,19 +23,43 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     @Override
-    public List<Post> searchPost(String title, String username, PostTag tag) {
+    public Page<Post> searchPost(Long userId, String title, String username, List<PostTag> tags, Pageable pageable) {
         QPost post = QPost.post;
         QUser user = QUser.user;
 
-        return queryFactory
+        List<Post> content =  queryFactory
                 .selectFrom(post)
+                .distinct()
                 .join(post.user, user).fetchJoin()
                 .where(
+                        userIdEq(userId),
                         titleContains(title),
                         usernameContains(username),
-                        tagEquals(tag)
+                        tagIn(tags)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(post.createdTime.desc())
                 .fetch();
+
+        Long total = queryFactory
+                .select(post.id.countDistinct())
+                .distinct()
+                .from(post)
+                .join(post.user, user)
+                .where(
+                        userIdEq(userId),
+                        titleContains(title),
+                        usernameContains(username),
+                        tagIn(tags)
+                )
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, Optional.ofNullable(total).orElse(0L));
+    }
+
+    private BooleanExpression userIdEq(Long userId){
+        return (userId != null) ? QPost.post.user.id.eq(userId) : null;
     }
 
     private BooleanExpression titleContains(String title){
@@ -42,7 +70,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return (username != null && !username.isEmpty()) ? QPost.post.user.name.containsIgnoreCase(username) : null;
     }
 
-    private BooleanExpression tagEquals(PostTag tag){
-        return tag != null ? QPost.post.tag.eq(tag) : null;
+    private BooleanExpression tagIn(List<PostTag> tags){
+        return (tags != null && tags.isEmpty()) ? QPost.post.tags.any().in(tags) : null;
     }
 }

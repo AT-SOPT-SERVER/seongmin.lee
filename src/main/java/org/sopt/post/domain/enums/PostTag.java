@@ -1,15 +1,14 @@
-package org.sopt.post.domain;
+package org.sopt.post.domain.enums;
 
 import org.sopt.global.error.exception.BusinessException;
-
-import java.util.Optional;
 
 import static org.sopt.global.error.ErrorCode.INVALID_POST_TAG;
 
 public enum PostTag {
-    DATABASE, BACKEND, INFRA;
+    DATABASE, BACKEND, INFRA, ETC;
 
     public static PostTag from(String value){
+        if(value == null) return null;
         try{
             return PostTag.valueOf(value.toUpperCase());
         }catch (IllegalArgumentException e){

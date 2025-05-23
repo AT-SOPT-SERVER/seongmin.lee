@@ -24,7 +24,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ResultResponse<Void>> join(@RequestBody UserCreateRequest request){
-        Long id = userService.join(request);
+        Long id = userService.createUser(request);
         URI location = URI.create("/users" + id);
         return ResponseEntity.created(location)
                 .body(ResultResponse.of(ResultCode.CREATED, null));

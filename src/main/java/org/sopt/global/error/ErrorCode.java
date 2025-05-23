@@ -6,15 +6,22 @@ public enum ErrorCode {
     POST_NOT_FOUND(40402, 404, "해당하는 게시물이 존재하지 않습니다."),
     NOT_ALLOWED_BLANK_TITLE(40001, 400, "제목은 비어있을 수 없습니다."),
     NOT_ALLOWED_BLANK_CONTENT(40002, 400, "내용은 비어있을 수 없습니다."),
-    TOO_LONG_TITLE(40004, 400, "제목의 길이는 30글자를 넘어선 안됩니다."),
-    TOO_LONG_CONTENT(40005, 400, "내용의 길이는 1000글자를 넘어선 안됩니다."),
+    TOO_LONG_POST_TITLE(40004, 400, "제목의 길이는 30글자를 넘어선 안됩니다."),
+    TOO_LONG_POST_CONTENT(40005, 400, "내용의 길이는 1000글자를 넘어선 안됩니다."),
     DUPLICATED_TITLE(40901, 409, "이미 존재하는 제목입니다."),
     INVALID_POST_TAG(40006, 400, "유효하지 않은 태그입니다."),
+    TAGS_STRUCTURE_ERROR(40007, 400, "유효하지 않은 태그 리스트 형식입니다."),
 
     // User
     USER_NOT_FOUND(40403, 404, "해당하는 유저가 존재하지 않습니다."),
     NOT_ALLOWED_BLANK_USERNAME(40003, 400, "닉네임은 비어있을 수 없습니다."),
-    TOO_LONG_USERNAME(40006, 400, "닉네임의 길이는 10글자를 넘어선 안됩니다."),
+    TOO_LONG_USERNAME(40008, 400, "닉네임의 길이는 10글자를 넘어선 안됩니다."),
+
+
+    // Comment
+    COMMENT_COT_FOUND(40404, 404, "해당하는 댓글이 존재하지 않습니다."),
+    NO_PERMISSION_TO_ACCESS_COMMENT(40302, 403, "댓글을 수정할 권한이 없습니다."),
+    TOO_LONG_COMMENT_CONTENT(40009, 400, "내용의 길이는 300글자를 넘어선 안됩니다."),
 
 
     // System
