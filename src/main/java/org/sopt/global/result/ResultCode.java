@@ -1,5 +1,8 @@
 package org.sopt.global.result;
 
+import lombok.Getter;
+
+@Getter
 public enum ResultCode {
     CREATED(201, "응답 성공"),
     SUCCESS(200, "응답 성공");
@@ -15,11 +18,4 @@ public enum ResultCode {
         this.msg = msg;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
 }

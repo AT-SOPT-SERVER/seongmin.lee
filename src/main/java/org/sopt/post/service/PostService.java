@@ -52,15 +52,10 @@ public class PostService {
         return newPost.getId();
     }
 
-
     public PostResponse getPost(Long id) {
-        Post findPost = findPost(id);
-        List<Comment> comments = findPost.getComments();
-        return PostResponse.of(findPost, comments.stream()
-                .map(CommentResponse::from)
-                .collect(Collectors.toList())
-        );
+        return PostResponse.of(findPost(id));
     }
+
     @Transactional
     public void updatePost(Long updateId, PostUpdateRequest updateRequest) {
         validateTitle(updateRequest.title());

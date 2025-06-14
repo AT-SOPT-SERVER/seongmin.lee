@@ -14,7 +14,13 @@ import java.util.List;
 
 @Getter
 @Entity
-@Table(indexes = @Index(name = "idx_post_created_time", columnList = "createdTime DESC"))
+@Table(
+        indexes = {
+                @Index(name = "idx_post_user_id", columnList = "user_id"),
+                @Index(name = "idx_post_created_time", columnList = "createdTime DESC"),
+                @Index(name = "idx_post_user_id_created_time", columnList = "user_id, createdTime DESC")
+        }
+)
 public class Post extends BaseTimeEntity {
 
     @Id

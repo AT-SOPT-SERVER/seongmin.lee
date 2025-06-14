@@ -1,11 +1,17 @@
 package org.sopt.like.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.sopt.comment.domain.Comment;
 import org.sopt.global.entity.BaseTimeEntity;
 import org.sopt.user.domain.User;
 
 @Entity
+@Table(indexes = {
+        @Index(name = "idx_comment_like_comment_id", columnList = "comment_id")
+})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentLike extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +22,6 @@ public class CommentLike extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Comment comment;
-
-    protected CommentLike(){
-
-    }
 
     public static CommentLike createCommentLike(User user, Comment comment){
         CommentLike commentLike = new CommentLike();

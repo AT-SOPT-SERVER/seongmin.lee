@@ -12,6 +12,11 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(indexes = {
+        @Index(name = "idx_comment_post_id", columnList = "post_id"),
+        @Index(name = "idx_comment_created_time", columnList = "createdTime DESC"),
+        @Index(name = "idx_comment_post_created", columnList = "post_id, createdTime DESC")
+})
 public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
