@@ -15,6 +15,7 @@ import org.sopt.global.error.exception.BusinessException;
 import org.sopt.post.repository.PostRepository;
 import org.sopt.user.repository.UserRepository;
 import org.sopt.validator.TextValidator;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -75,6 +76,7 @@ public class PostService {
     }
 
 
+    @Cacheable(value = "post", key = "#postService")
     @Transactional(readOnly = true)
     public PostInfoListResponse searchPosts(Long userId, String keyword, String username, List<String> tags, int page, int size) {
         List<PostTag> postTags = getPostTags(tags);
