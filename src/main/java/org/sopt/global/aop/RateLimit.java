@@ -1,4 +1,4 @@
-package org.sopt.aop;
+package org.sopt.global.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

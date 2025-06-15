@@ -1,11 +1,11 @@
-package org.sopt.aop.aspect;
+package org.sopt.global.aop.aspect;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.sopt.aop.RateLimit;
+import org.sopt.global.aop.RateLimit;
 import org.sopt.global.error.exception.BusinessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;

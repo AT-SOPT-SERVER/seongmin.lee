@@ -1,7 +1,9 @@
 package org.sopt.user.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.sopt.comment.domain.Comment;
 import org.sopt.global.entity.BaseTimeEntity;
 import org.sopt.post.domain.Post;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
     @Id
@@ -28,9 +31,6 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
-
-    protected User() {
-    }
 
     public User(String name, String email) {
         this.name = name;

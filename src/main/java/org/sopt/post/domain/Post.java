@@ -1,7 +1,9 @@
 package org.sopt.post.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 import org.sopt.comment.domain.Comment;
 import org.sopt.global.entity.BaseTimeEntity;
@@ -21,6 +23,7 @@ import java.util.List;
                 @Index(name = "idx_post_user_id_created_time", columnList = "user_id, createdTime DESC")
         }
 )
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseTimeEntity {
 
     @Id
@@ -48,9 +51,6 @@ public class Post extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PostLike> likes = new ArrayList<>();
-
-    public Post() {
-    }
 
     public Post(String title) {
         this.title = title;
