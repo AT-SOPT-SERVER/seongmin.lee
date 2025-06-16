@@ -15,7 +15,9 @@ import org.sopt.global.error.exception.BusinessException;
 import org.sopt.post.repository.PostRepository;
 import org.sopt.user.repository.UserRepository;
 import org.sopt.validator.TextValidator;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,6 +31,7 @@ import static org.sopt.global.error.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PostService {
 
     private static final int MAX_TITLE_LENGTH = 30;
@@ -39,6 +42,7 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
+    @CacheEvict(cacheNames = "postSearch", allEntries = true)
     public Long addPost(Long userId, PostCreateRequest postRequest) {
         validateTitle(postRequest.title());
         validateContent(postRequest.content());
@@ -53,11 +57,16 @@ public class PostService {
         return newPost.getId();
     }
 
+    @Cacheable(cacheNames = "post", key = "#id")
     public PostResponse getPost(Long id) {
         return PostResponse.of(findPost(id));
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "post", key = "#updateId"),
+            @CacheEvict(cacheNames = "postSearch", allEntries = true)
+    })
     public void updatePost(Long updateId, PostUpdateRequest updateRequest) {
         validateTitle(updateRequest.title());
         validateContent(updateRequest.content());
@@ -70,14 +79,24 @@ public class PostService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "post", key = "#deleteId"),
+            @CacheEvict(cacheNames = "postSearch", allEntries = true)
+    })
     public void deletePost(Long deleteId) {
         Post findPost = findPost(deleteId);
         postRepository.delete(findPost);
     }
 
 
-    @Cacheable(value = "post", key = "#postService")
-    @Transactional(readOnly = true)
+    @Cacheable(
+            cacheNames = "postSearch",
+            key = "'uid=' + (#userId != null ? #userId : '') + " +
+                    "'&kw=' + (#keyword != null ? #keyword : '') + " +
+                    "'&username=' + (#username != null ? #username : '') + " +
+                    "'&tags=' + (#tags != null ? T(String).join(',', #tags) : '') + " +
+                    "'&p=' + #page + '&s=' + #size"
+    )
     public PostInfoListResponse searchPosts(Long userId, String keyword, String username, List<String> tags, int page, int size) {
         List<PostTag> postTags = getPostTags(tags);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdTime"));
@@ -109,6 +128,7 @@ public class PostService {
     }
 
     private List<PostTag> getPostTags(List<String> tags) {
+        if(tags == null || tags.isEmpty()) return List.of();
         return tags.stream()
                 .map(PostTag::from)
                 .toList();

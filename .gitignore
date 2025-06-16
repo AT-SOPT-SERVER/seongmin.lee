@@ -4,6 +4,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 application.yml
+data.sql
 
 ### IntelliJ IDEA ###
 .idea

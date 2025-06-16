@@ -71,6 +71,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     private BooleanExpression tagIn(List<PostTag> tags){
-        return (tags != null && tags.isEmpty()) ? QPost.post.tags.any().in(tags) : null;
+        return (tags != null && !tags.isEmpty()) ? QPost.post.tags.any().in(tags) : null;
     }
 }

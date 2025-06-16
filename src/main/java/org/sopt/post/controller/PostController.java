@@ -1,5 +1,8 @@
 package org.sopt.post.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.sopt.comment.dto.response.CommentListResponse;
+import org.sopt.comment.service.CommentService;
 import org.sopt.post.dto.response.PostInfoListResponse;
 import org.sopt.post.dto.request.PostCreateRequest;
 import org.sopt.post.dto.response.PostResponse;
@@ -15,13 +18,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
 
     @PostMapping
 //    @RateLimit(tag = "createPost")
@@ -73,6 +75,19 @@ public class PostController {
                 keyword,
                 username,
                 tags,
+                page,
+                size
+        )));
+    }
+
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<ResultResponse<CommentListResponse>> getComments(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ){
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, commentService.getComments(
+                postId,
                 page,
                 size
         )));
