@@ -33,7 +33,6 @@ public class CommentService {
         return comment.getId();
     }
 
-    @CacheEvict(cacheNames = "postComments", key = "")
     public void modifyComment(Long userId, Long commentId, CommentUpdateRequest request){
         validateContent(request.newContent());
         Comment comment = findComment(commentId);
