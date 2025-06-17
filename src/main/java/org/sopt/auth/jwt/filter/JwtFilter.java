@@ -10,8 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Optional;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.Collection;
 
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -43,10 +46,17 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 나중에 권한, 인가 작업 추가되면 구현
-//        saveAuthenticationAtSecurityContextHolder(token);
+        saveAuthenticationAtSecurityContextHolder(token);
 
         filterChain.doFilter(request, response);
 
+    }
+
+    private void saveAuthenticationAtSecurityContextHolder(String token) {
+        Long id = jwtUtil.getId(token);
+
+        // 나중에 권한 추가되면 권한 추가
+        String username = jwtUtil.getUsername(token);
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(id, username, Collections.emptyList()));
     }
 }
