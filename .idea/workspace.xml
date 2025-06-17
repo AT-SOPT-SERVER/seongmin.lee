@@ -4,22 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="baf6dc9b-72b3-4935-b8c8-ef4ce5e02dfb" name="Changes" comment="#10 [FEAT] 좋아요 기능 구현">
+    <list default="true" id="baf6dc9b-72b3-4935-b8c8-ef4ce5e02dfb" name="Changes" comment="#10 [FEAT] 데이터 베이스 초기화 적용 및 캐시 테스트">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/comment/dto/response/CommentListResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/global/swagger/SwaggerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/controller/CommentLikeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/controller/PostLikeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/dto/response/LikeCountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/global/error/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/global/error/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/comment/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/comment/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/comment/dto/response/CommentResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/comment/dto/response/CommentResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/comment/repository/CommentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/comment/repository/CommentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/comment/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/comment/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/common/init/InitDatabase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/global/error/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/global/error/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/global/redis/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/global/redis/RedisConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/like/controller/LikeController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/CommentLikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/CommentLikeRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/PostLikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/repository/PostLikeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/like/service/CommentLikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/service/CommentLikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/like/service/PostLikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/like/service/PostLikeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/Post.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/enums/PostTag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/domain/enums/PostTag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostCreateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/request/PostUpdateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryCustom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryCustom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostInfoListResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostInfoListResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostInfoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/dto/response/PostInfoResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/repository/PostRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/post/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/post/service/PostService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/user/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,12 +109,18 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\LSM\study\SOPT\seongmin.lee\src\main\resources" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.sopt.like.service" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.seongmin.lee [build]">
+  <component name="RunManager" selected="Spring Boot.Main">
     <configuration name="seongmin.lee [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -170,7 +189,13 @@
       <updated>1743678209174</updated>
       <workItem from="1743678209892" duration="406000" />
       <workItem from="1744119616003" duration="676000" />
-      <workItem from="1747988063770" duration="3907000" />
+      <workItem from="1747988063770" duration="4109000" />
+      <workItem from="1748249172123" duration="92000" />
+      <workItem from="1749220164057" duration="1753000" />
+      <workItem from="1749715172433" duration="11316000" />
+      <workItem from="1749916627984" duration="5748000" />
+      <workItem from="1749971672386" duration="2063000" />
+      <workItem from="1750047224998" duration="25878000" />
     </task>
     <task id="LOCAL-00001" summary="#10 [REFACTOR] UserService 메서드 명 변경">
       <option name="closed" value="true" />
@@ -204,7 +229,47 @@
       <option name="project" value="LOCAL" />
       <updated>1747937009954</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="#10 [FEAT] 태그 기능 확장">
+      <option name="closed" value="true" />
+      <created>1747992131461</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1747992131461</updated>
+    </task>
+    <task id="LOCAL-00006" summary="#10 [FEAT] 인덱스 추가">
+      <option name="closed" value="true" />
+      <created>1749922795278</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1749922795278</updated>
+    </task>
+    <task id="LOCAL-00007" summary="#10 [FEAT] Redis connection 설정 및 Redis Configuration 추가">
+      <option name="closed" value="true" />
+      <created>1749973629554</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1749973629554</updated>
+    </task>
+    <task id="LOCAL-00008" summary="#10 [REFACTOR] 패키지 구조 변경 및 도메인 객체 생성자 리팩토링">
+      <option name="closed" value="true" />
+      <created>1749973691447</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1749973691447</updated>
+    </task>
+    <task id="LOCAL-00009" summary="#10 [FEAT] 데이터 베이스 초기화 적용 및 캐시 테스트">
+      <option name="closed" value="true" />
+      <created>1749973729935</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1749973729935</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,6 +292,11 @@
     <MESSAGE value="#10 [FEAT] 댓글 기능 추가" />
     <MESSAGE value="#10 [FEAT] 페이지네이션 적용" />
     <MESSAGE value="#10 [FEAT] 좋아요 기능 구현" />
-    <option name="LAST_COMMIT_MESSAGE" value="#10 [FEAT] 좋아요 기능 구현" />
+    <MESSAGE value="#10 [FEAT] 태그 기능 확장" />
+    <MESSAGE value="#10 [FEAT] 인덱스 추가" />
+    <MESSAGE value="#10 [FEAT] Redis connection 설정 및 Redis Configuration 추가" />
+    <MESSAGE value="#10 [REFACTOR] 패키지 구조 변경 및 도메인 객체 생성자 리팩토링" />
+    <MESSAGE value="#10 [FEAT] 데이터 베이스 초기화 적용 및 캐시 테스트" />
+    <option name="LAST_COMMIT_MESSAGE" value="#10 [FEAT] 데이터 베이스 초기화 적용 및 캐시 테스트" />
   </component>
 </project>

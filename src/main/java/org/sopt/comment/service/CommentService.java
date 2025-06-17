@@ -4,11 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.comment.domain.Comment;
 import org.sopt.comment.dto.request.CommentCreateRequest;
 import org.sopt.comment.dto.request.CommentUpdateRequest;
+import org.sopt.comment.dto.response.CommentListResponse;
 import org.sopt.comment.repository.CommentRepository;
 import org.sopt.global.error.ErrorCode;
 import org.sopt.global.error.exception.BusinessException;
 import org.sopt.post.domain.Post;
 import org.sopt.user.domain.User;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +48,11 @@ public class CommentService {
 
     public Comment findComment(Long commentId){
         return commentRepository.findById(commentId).orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_COT_FOUND));
+    }
+
+    public CommentListResponse getComments(Long postId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdTime"));
+        return CommentListResponse.from(commentRepository.findCommentsByPostId(postId, pageable));
     }
 
     public void validateContent(String content){

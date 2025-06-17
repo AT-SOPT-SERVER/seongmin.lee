@@ -8,7 +8,7 @@ public enum PostTag {
     DATABASE, BACKEND, INFRA, ETC;
 
     public static PostTag from(String value){
-        if(value == null) return null;
+        if(value == null) throw new BusinessException(INVALID_POST_TAG);
         try{
             return PostTag.valueOf(value.toUpperCase());
         }catch (IllegalArgumentException e){

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -20,7 +20,7 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<ResultResponse<Long>> postComment(@RequestHeader(name = "Authorization") Long userId, CommentCreateRequest request){
-        URI location = URI.create("/comment/" + commentManagementFacade.createComment(userId, request));
+        URI location = URI.create("/comments/" + commentManagementFacade.createComment(userId, request));
         return ResponseEntity.created(location)
                 .body(ResultResponse.of(ResultCode.CREATED, null));
     }
