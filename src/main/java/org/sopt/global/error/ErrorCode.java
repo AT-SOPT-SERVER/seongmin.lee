@@ -18,10 +18,12 @@ public enum ErrorCode {
     TOO_LONG_USERNAME(40008, 400, "닉네임의 길이는 10글자를 넘어선 안됩니다."),
 
 
+
     // Comment
     COMMENT_COT_FOUND(40404, 404, "해당하는 댓글이 존재하지 않습니다."),
     NO_PERMISSION_TO_ACCESS_COMMENT(40302, 403, "댓글을 수정할 권한이 없습니다."),
     TOO_LONG_COMMENT_CONTENT(40009, 400, "내용의 길이는 300글자를 넘어선 안됩니다."),
+    INVALID_PASSWORD(40300, 403, "잘못된 비밀번호입니다."),
 
 
     // System

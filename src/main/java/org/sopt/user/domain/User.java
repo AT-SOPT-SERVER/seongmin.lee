@@ -18,8 +18,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10, nullable = false, unique = true)
     private String name;
+
+    private String password;
 
     private String email;
 
@@ -32,13 +34,14 @@ public class User extends BaseTimeEntity {
     protected User() {
     }
 
-    public User(String name, String email) {
+    protected User(String name, String password, String email) {
         this.name = name;
+        this.password = password;
         this.email = email;
     }
 
-    public static User createUser(String name, String email) {
-        return new User(name, email);
+    public static User createUser(String name, String password, String email) {
+        return new User(name, password, email);
     }
 
 }
