@@ -1,7 +1,9 @@
 package org.sopt.global.error.exception;
 
+import lombok.Getter;
 import org.sopt.global.error.ErrorCode;
 
+@Getter
 public class BusinessException extends RuntimeException{
 
     private final ErrorCode errorCode;
@@ -11,7 +13,4 @@ public class BusinessException extends RuntimeException{
         this.errorCode = errorCode;
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
 }

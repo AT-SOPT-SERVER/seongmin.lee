@@ -1,52 +1,47 @@
 package org.sopt.user.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.sopt.comment.domain.Comment;
+import org.sopt.global.entity.BaseTimeEntity;
 import org.sopt.post.domain.Post;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
-public class User {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10, nullable = false, unique = true)
     private String name;
+
+    private String password;
 
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> postList = new ArrayList<>();
 
-    protected User() {
-    }
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
 
-    public User(String name, String email) {
+    protected User(String name, String password, String email) {
         this.name = name;
+        this.password = password;
         this.email = email;
     }
 
-    public static User createUser(String name, String email) {
-        return new User(name, email);
+    public static User createUser(String name, String password, String email) {
+        return new User(name, password, email);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public List<Post> getPostList(){
-        return postList;
-    }
 }

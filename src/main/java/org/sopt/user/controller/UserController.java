@@ -1,6 +1,7 @@
 package org.sopt.user.controller;
 
-import org.sopt.user.dto.UserCreateRequest;
+import org.sopt.user.dto.request.LoginRequest;
+import org.sopt.user.dto.request.UserCreateRequest;
 import org.sopt.global.result.ResultCode;
 import org.sopt.global.result.ResultResponse;
 import org.sopt.user.service.UserService;
@@ -24,10 +25,17 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ResultResponse<Void>> join(@RequestBody UserCreateRequest request){
-        Long id = userService.join(request);
+        Long id = userService.createUser(request);
         URI location = URI.create("/users" + id);
         return ResponseEntity.created(location)
                 .body(ResultResponse.of(ResultCode.CREATED, null));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResultResponse<Void>> login(@RequestBody LoginRequest request){
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + userService.loginProcess(request))
+                .body(ResultResponse.of(ResultCode.SUCCESS, null));
     }
 
 }
