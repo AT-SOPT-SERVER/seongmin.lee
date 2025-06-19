@@ -1,6 +1,7 @@
 package org.sopt.like.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.global.auth.security.CustomUserDetails;
 import org.sopt.global.result.ResultCode;
 import org.sopt.global.result.ResultResponse;
 import org.sopt.like.dto.response.LikeCountResponse;
@@ -10,6 +11,7 @@ import org.sopt.post.service.PostService;
 import org.sopt.user.domain.User;
 import org.sopt.user.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,10 +25,10 @@ public class PostLikeController {
 
     @PostMapping
     public ResponseEntity<ResultResponse<Void>> togglePostLike(
-            @RequestHeader(name = "Authorization") Long userId,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable Long postId
     ){
-        User user = userService.findUser(userId);
+        User user = userService.findUser(userDetails.getId());
         Post post = postService.findPost(postId);
         postLikeService.toggleLike(user, post);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, null));
