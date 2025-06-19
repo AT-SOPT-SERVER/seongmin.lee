@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.sopt.global.error.ErrorCode.*;
@@ -67,14 +68,16 @@ public class PostService {
             @CacheEvict(cacheNames = "post", key = "#updateId"),
             @CacheEvict(cacheNames = "postSearch", allEntries = true)
     })
-    public void updatePost(Long updateId, PostUpdateRequest updateRequest) {
+    public void updatePost(Long userId, Long updateId, PostUpdateRequest updateRequest) {
         validateTitle(updateRequest.title());
         validateContent(updateRequest.content());
         validateTags(updateRequest.tags());
 
         List<PostTag> tags = getPostTags(updateRequest.tags());
-
         Post findPost = findPost(updateId);
+
+        validateUserAndPostMatched(userId, findPost);
+
         findPost.updatePost(updateRequest.title(), updateRequest.content(), tags);
     }
 
@@ -83,8 +86,9 @@ public class PostService {
             @CacheEvict(cacheNames = "post", key = "#deleteId"),
             @CacheEvict(cacheNames = "postSearch", allEntries = true)
     })
-    public void deletePost(Long deleteId) {
+    public void deletePost(Long userId, Long deleteId) {
         Post findPost = findPost(deleteId);
+        validateUserAndPostMatched(userId, findPost);
         postRepository.delete(findPost);
     }
 
@@ -136,5 +140,11 @@ public class PostService {
 
     private boolean isTitlePresent(String title) {
         return postRepository.existsByTitle(title);
+    }
+
+    private void validateUserAndPostMatched(Long userId, Post findPost) {
+        if(!Objects.equals(findPost.getUser().getId(), userId)){
+            throw new BusinessException(FORBIDDEN_DELETE_POST);
+        }
     }
 }

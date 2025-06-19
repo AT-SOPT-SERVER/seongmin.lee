@@ -1,20 +1,18 @@
-package org.sopt.auth.jwt.filter;
+package org.sopt.global.auth.jwt.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.sopt.auth.jwt.util.JwtUtil;
+import org.sopt.global.auth.jwt.util.JwtUtil;
+import org.sopt.global.auth.security.CustomUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Optional;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.Collection;
 
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -54,9 +52,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private void saveAuthenticationAtSecurityContextHolder(String token) {
         Long id = jwtUtil.getId(token);
+        String username = jwtUtil.getUsername(token);
+
+        CustomUserDetails userDetails = new CustomUserDetails(id, username, null);
+
 
         // 나중에 권한 추가되면 권한 추가
-        String username = jwtUtil.getUsername(token);
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(id, username, Collections.emptyList()));
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, Collections.emptyList()));
     }
 }

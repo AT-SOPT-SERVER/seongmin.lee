@@ -1,4 +1,4 @@
-package org.sopt.auth.jwt.util;
+package org.sopt.global.auth.jwt.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

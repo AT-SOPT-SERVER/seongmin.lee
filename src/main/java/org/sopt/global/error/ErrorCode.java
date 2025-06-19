@@ -11,6 +11,8 @@ public enum ErrorCode {
     DUPLICATED_TITLE(40901, 409, "이미 존재하는 제목입니다."),
     INVALID_POST_TAG(40006, 400, "유효하지 않은 태그입니다."),
     TAGS_STRUCTURE_ERROR(40007, 400, "유효하지 않은 태그 리스트 형식입니다."),
+    FORBIDDEN_DELETE_POST(40301, 403, "게시글을 삭제할 권한이 없습니다."),
+    FORBIDDEN_UPDATE_POST(40302, 403, "게시글을 편집할 권한이 없습니다."),
 
     // User
     USER_NOT_FOUND(40403, 404, "해당하는 유저가 존재하지 않습니다."),

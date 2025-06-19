@@ -1,7 +1,7 @@
 package org.sopt.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.auth.jwt.util.JwtUtil;
+import org.sopt.global.auth.jwt.util.JwtUtil;
 import org.sopt.user.domain.User;
 import org.sopt.user.dto.request.LoginRequest;
 import org.sopt.user.dto.request.UserCreateRequest;
